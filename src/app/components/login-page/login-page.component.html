@@ -1,0 +1,42 @@
+<div class="login-page">
+	<div class="login-popup d-flex align-items-center justify-content-center">
+		<form class="form justify-content-center p-3"
+					#myLoginForm="ngForm"
+					(ngSubmit)="login(myLoginForm.value)"
+					ngNativeValidate>
+
+			<div class="form-group d-flex flex-column align-items-start">
+				<label for="user">Usuário</label>
+				<input type="text"
+							 placeholder="xb207090"
+							 id="user"
+							 [(ngModel)]="loginFormModel.user"
+							 name="user"
+							 class="form-control mr-sm-3"
+							 required>
+			</div>
+
+			<div class="form-group d-flex flex-column align-items-start">
+				<label for="password">Senha</label>
+				<input type="password"
+							 id="password"
+							 [(ngModel)]="loginFormModel.password"
+							 name="password"
+							 class="form-control mr-sm-3"
+							 required>
+			</div>
+
+			<div class="form-group">
+				<input type="checkbox"
+							 id="savePassword"
+							 [(ngModel)]="loginFormModel.savePassword"
+							 name="savePassword"
+							 class="mr-2"><label for="savePassword"> Salvar senha?</label>
+			</div>
+
+			<div *ngIf="!!error" class="small color-danger"></div>
+
+			<button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
+		</form>
+	</div>
+</div>

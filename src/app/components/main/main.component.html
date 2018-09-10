@@ -1,0 +1,152 @@
+<div class="overlay" *ngIf="!jiraData.isFulfilled()"></div>
+
+<div class="searchRow shadow">
+
+	<form class="form-inline justify-content-center p-3"
+				#myForm="ngForm"
+				(ngSubmit)="generateReports(myForm.value)"
+				ngNativeValidate>
+
+		<div class="input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text">Data inicial</span>
+			</div>
+			<input type="date"
+						 id="initial-date"
+						 title="initial-date"
+						 [(ngModel)]="searchFormModel.initialDate"
+						 name="initialDate"
+						 class="form-control mr-sm-3">
+		</div>
+
+		<div class="input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text">Data final</span>
+			</div>
+			<input type="date"
+						 id="final-date"
+						 title="final-date"
+						 [(ngModel)]="searchFormModel.finalDate"
+						 name="finalDate"
+						 class="form-control mr-sm-3">
+		</div>
+
+		<button type="submit" class="btn btn-primary">Gerar relatórios</button>
+
+	</form>
+
+</div>
+
+<div class="container mt-5">
+
+	<main>
+
+		<!-- Horas lançadas por tarefa por dia -->
+		<app-table title="Horas lançadas por tarefa por dia" [condition]="jiraData.jiraIssuesByWorklog.length">
+			<table class="table table-hover">
+
+				<thead>
+				<tr>
+					<th scope="col">
+								<span class="pointer" (click)="sortColumnBy('key')">
+									ID <i [class]="getFaIconClassFor('key')" aria-hidden="true"></i>
+								</span>
+					</th>
+					<th scope="col">
+								<span class="pointer" (click)="sortColumnBy('status')">
+									Status <i [class]="getFaIconClassFor('status')" aria-hidden="true"></i>
+								</span>
+					</th>
+					<th scope="col">
+								<span class="pointer" (click)="sortColumnBy('summary')">
+									Task <i [class]="getFaIconClassFor('summary')" aria-hidden="true"></i>
+								</span>
+					</th>
+					<!--<th scope="col">Description</th>-->
+					<th scope="col">
+								<span class="pointer" (click)="sortColumnBy('created')">
+									Worklog Date <i [class]="getFaIconClassFor('created')" aria-hidden="true"></i>
+								</span>
+					</th>
+					<th scope="col">
+								<span class="pointer" (click)="sortColumnBy('timeSpentHours')">
+									Worklog Hours <i [class]="getFaIconClassFor('timeSpentHours')" aria-hidden="true"></i>
+								</span>
+					</th>
+				</tr>
+				</thead>
+
+				<tbody>
+				<tr *ngFor="let issue of jiraData.jiraIssuesByWorklog">
+					<th scope="row">{{ issue.key }}</th>
+					<td contenteditable>{{ issue.status }}</td>
+					<td contenteditable>{{ issue.summary }}</td>
+					<!--<td contenteditable>{{ issue.fields?.description }}</td>-->
+					<td contenteditable>{{ issue.created }}</td>
+					<td contenteditable>{{ issue.timeSpentHours }}</td>
+				</tr>
+				</tbody>
+
+			</table>
+		</app-table>
+
+		<!-- Horas lançadas por dia -->
+		<app-table title="Horas lançadas por dia" [condition]="keys(jiraData.jiraWorklogByDays).length">
+			<table class="table table-bordered table-striped text-center">
+
+				<thead>
+				<tr>
+					<th scope="col">Date</th>
+					<th scope="col">Hours</th>
+				</tr>
+				</thead>
+
+				<tbody>
+				<tr *ngFor="let worklogHours of keys(jiraData.jiraWorklogByDays)">
+					<th scope="row">{{ worklogHours.key }}</th>
+					<td>{{ worklogHours.value }}</td>
+				</tr>
+				</tbody>
+
+			</table>
+		</app-table>
+
+		<!-- Horas lançadas do time -->
+		<app-table title="Horas lançadas do time" [condition]="keys(jiraData.jiraTeamWorklog).length">
+			<div class="overflow-x-auto">
+				<table class="table table-sm table-bordered table-hover text-center">
+
+					<thead>
+					<tr>
+						<th scope="col" class="sticky"></th>
+						<th scope="col"
+								[ngClass]="{'bg-secondary': isWeekend(day)}"
+								*ngFor="let day of dateRange"
+						>{{ day | date: "dd MMM": '': 'pt-br'}}
+						</th>
+					</tr>
+					</thead>
+
+					<tbody>
+					<tr *ngFor="let worklogHours of keys(jiraData.jiraTeamWorklog)">
+						<th scope="row" class="sticky">
+							<div class="internal-sticky-th">
+								{{ worklogHours.key | capitalizeFirst }}
+							</div>
+						</th>
+
+						<td class="align-middle"
+								[ngClass]="{'bg-secondary': isWeekend(day)}"
+								*ngFor="let day of dateRange"
+						>{{ getWorklogHoursOnDay(worklogHours, day) }}
+						</td>
+					</tr>
+					</tbody>
+
+				</table>
+			</div>
+		</app-table>
+
+	</main>
+
+</div>

@@ -2,7 +2,14 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "module": "es2015",
+		"noUnusedParameters": true,
+		"noUnusedLocals": true,
+		"alwaysStrict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"strictNullChecks": true,
+		"module": "es2015",
     "types": []
   },
   "exclude": [

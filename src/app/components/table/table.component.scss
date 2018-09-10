@@ -1,0 +1,26 @@
+.card {
+	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+	border-radius: 6px;
+
+	.card-header {
+		border-radius: 6px 6px 0 0;
+	}
+
+
+	th.sticky {
+		left: -1px;
+		position: sticky;
+		background-color: white;
+		z-index: 9;
+		padding: 0;
+
+		.internal-sticky-th {
+			border-right: 1px solid #dee2e6;
+			padding: 0.3rem;
+		}
+	}
+}
+
+.overflow-x-auto {
+	overflow-x: auto;
+}
