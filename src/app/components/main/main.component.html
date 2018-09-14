@@ -42,7 +42,7 @@
 	<main>
 
 		<!-- Horas lançadas por tarefa por dia -->
-		<app-table title="Horas lançadas por tarefa por dia" [condition]="jiraData.jiraIssuesByWorklog.length">
+		<app-table title="Horas lançadas por tarefa por dia" [condition]="jiraData.currentUserIssues.length">
 			<table class="table table-hover">
 
 				<thead>
@@ -77,7 +77,7 @@
 				</thead>
 
 				<tbody>
-				<tr *ngFor="let issue of jiraData.jiraIssuesByWorklog">
+				<tr *ngFor="let issue of jiraData.currentUserIssues">
 					<th scope="row">{{ issue.key }}</th>
 					<td contenteditable>{{ issue.status }}</td>
 					<td contenteditable>{{ issue.summary }}</td>
@@ -91,7 +91,7 @@
 		</app-table>
 
 		<!-- Horas lançadas por dia -->
-		<app-table title="Horas lançadas por dia" [condition]="keys(jiraData.jiraWorklogByDays).length">
+		<app-table title="Horas lançadas por dia" [condition]="keys(jiraData.currentUserWorklogByDay).length">
 			<table class="table table-bordered table-striped text-center">
 
 				<thead>
@@ -102,7 +102,7 @@
 				</thead>
 
 				<tbody>
-				<tr *ngFor="let worklogHours of keys(jiraData.jiraWorklogByDays)">
+				<tr *ngFor="let worklogHours of keys(jiraData.currentUserWorklogByDay)">
 					<th scope="row">{{ worklogHours.key }}</th>
 					<td>{{ worklogHours.value }}</td>
 				</tr>
@@ -112,7 +112,7 @@
 		</app-table>
 
 		<!-- Horas lançadas do time -->
-		<app-table title="Horas lançadas do time" [condition]="keys(jiraData.jiraTeamWorklog).length">
+		<app-table title="Horas lançadas do time" [condition]="keys(jiraData.teamWorklogByDay).length">
 			<div class="overflow-x-auto">
 				<table class="table table-sm table-bordered table-hover text-center">
 
@@ -128,7 +128,7 @@
 					</thead>
 
 					<tbody>
-					<tr *ngFor="let worklogHours of keys(jiraData.jiraTeamWorklog)">
+					<tr *ngFor="let worklogHours of keys(jiraData.teamWorklogByDay)">
 						<th scope="row" class="sticky">
 							<div class="internal-sticky-th">
 								{{ worklogHours.key | capitalizeFirst }}

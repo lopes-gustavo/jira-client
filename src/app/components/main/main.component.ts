@@ -99,9 +99,7 @@ export class MainComponent {
 	}
 
 	private clearData() {
-		this.jiraData.jiraWorklogByDays = {};
-		this.jiraData.jiraIssuesByWorklog = [];
-		this.jiraData.jiraTeamWorklog = {};
+		this.jiraData.clear();
 		this.dateRange = [];
 	}
 
@@ -121,7 +119,7 @@ export class MainComponent {
 	}
 
 	private sortJiraIssuesByWorklog() {
-		this.jiraData.jiraIssuesByWorklog.sort((a, b) => {
+		this.jiraData.currentUserIssues.sort((a, b) => {
 			const column = this.sortParams.column as keyof Worklog;
 
 			if (a[column] < b[column]) {
@@ -186,10 +184,10 @@ export class MainComponent {
 		let issueCreatedDate = '-';
 		if (worklog.started) {
 			issueCreatedDate = moment(worklog.started).format('YYYY-MM-DD');
-			this.jiraData.jiraWorklogByDays[issueCreatedDate] = (this.jiraData.jiraWorklogByDays[issueCreatedDate] | 0) + worklog.timeSpentHours;
+			this.jiraData.currentUserWorklogByDay[issueCreatedDate] = (this.jiraData.currentUserWorklogByDay[issueCreatedDate] | 0) + worklog.timeSpentHours;
 		}
 
-		this.jiraData.jiraIssuesByWorklog.push({
+		this.jiraData.currentUserIssues.push({
 			key: issue.key,
 			status: issue.fields.status.name,
 			summary: issue.fields.summary,
@@ -206,14 +204,14 @@ export class MainComponent {
 			const issueCreatedDate = moment(worklog.started).format('YYYY-MM-DD');
 			const assigneeName = assignee.displayName;
 
-			if (!this.jiraData.jiraTeamWorklog[assigneeName]) {
-				this.jiraData.jiraTeamWorklog[assigneeName] = {};
-			}
+			const teamWorklogByAssignee = this.jiraData.teamWorklogByDay[assigneeName] || {};
 
 			// Adiciona o worklog.timeSpentHours no jiraTeamWorklog. Seta o mesmo como 0 caso não exista
-			this.jiraData.jiraTeamWorklog[assigneeName][issueCreatedDate] =
-				(this.jiraData.jiraTeamWorklog[assigneeName][issueCreatedDate] | 0) + worklog.timeSpentHours;
+			teamWorklogByAssignee[issueCreatedDate] = (teamWorklogByAssignee[issueCreatedDate] | 0) + worklog.timeSpentHours;
+
+			this.jiraData.teamWorklogByDay[assigneeName] = teamWorklogByAssignee;
 		}
+
 	}
 
 	// TODO: Remover esse método
@@ -435,11 +433,21 @@ interface Worklog {
 }
 
 class JiraData {
-	public jiraWorklogByDays: { [date: string]: number } = {};
-	public jiraIssuesByWorklog: Worklog[] = [];
-	public jiraTeamWorklog: { [name: string]: { [value: string]: number } } = {};
+	public currentUserWorklogByDay: { [date: string]: number } = {};
+	public currentUserIssues: Worklog[] = [];
+	public teamWorklogByDay: { [name: string]: { [value: string]: number } } = {};
 
-	isFulfilled(): boolean {
-		return !!this.jiraIssuesByWorklog.length;
+	public isFulfilled(): boolean {
+		return (
+			!!this.currentUserIssues.length &&
+			!!Object.getOwnPropertyNames(this.currentUserWorklogByDay).length &&
+			!!Object.getOwnPropertyNames(this.teamWorklogByDay).length
+		);
 	}
+
+	public clear(): void {{
+		this.currentUserWorklogByDay = {};
+		this.currentUserIssues = [];
+		this.teamWorklogByDay = {};
+	}}
 }
