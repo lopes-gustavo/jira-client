@@ -15,6 +15,7 @@
 		],
 		"prefer-const": [
 			true
-		]
+		],
+		"no-trailing-whitespace": false
 	}
 }

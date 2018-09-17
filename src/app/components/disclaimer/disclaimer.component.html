@@ -1,0 +1,50 @@
+<div class="fixed-top w-100 h-100 bg-light d-flex justify-content-around align-items-center">
+
+	<div class="box bg-white p-4 shadow">
+
+		<h1>Importante</h1>
+
+		<main>
+			<ul>
+
+				<li>É necessário o uso de uma extensão para superar uma limitação do JIRA
+
+					<ul *ngIf="currentBrowser.extensionUrl">
+						<li>
+							Recomendamos para seu browser ({{ currentBrowser.name }}) a extensão:
+							<a [href]="currentBrowser.extensionUrl" target="_blank">CORS</a>
+						</li>
+						<li>
+							<strong>CONFIGURE a extensão</strong> (1)
+							<br>
+							Remova o valor padrão e adicione o seguinte: <code>{{ currentBrowser.extensionPattern }}</code>
+						</li>
+					</ul>
+
+					<ul *ngIf="!currentBrowser.extensionUrl">
+						<li>
+							Recomendamos o uso dos browsers
+							<a href="https://www.google.com/chrome/" target="_blank">Chrome</a> ou
+							<a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a>
+							para isso.
+						</li>
+					</ul>
+
+				</li>
+
+				<li>
+					Esse sistema não utiliza de meios seguros para armazenar sua senha. Não utilize-o em computadores públicos.
+				</li>
+
+			</ul>
+
+			<span *ngIf="currentBrowser.extensionUrl">(1) nas configurações padrões, a extensão abre brechas de segurança em seu computador</span>
+		</main>
+
+		<div class="mt-4 d-flex justify-content-center">
+			<button (click)="onAgreeButtonClick()" class="btn btn-primary">Li e concordo com as afirmações acima</button>
+		</div>
+
+	</div>
+
+</div>

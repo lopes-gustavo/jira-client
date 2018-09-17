@@ -1,22 +1,23 @@
 import { Component } from '@angular/core';
-import { Jira } from '../../models/jira.model';
-import { SessionService } from '../../services/session.service';
-import { Nullable } from '../../types/nullable';
+import { Router } from '@angular/router';
+import { Jira } from '../../models';
+import { SessionService } from '../../services';
+import { Nullable } from '../../types';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+	selector: 'app-header',
+	templateUrl: './header.component.html',
+	styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
 
 	public currentUser: Nullable<Jira.Author>;
 
-	constructor(private sessionService: SessionService) {
+	constructor(private sessionService: SessionService, private router: Router) {
 		this.sessionService.currentUser.subscribe(currentUser => this.currentUser = currentUser);
 	}
 
-  public logout() {
-		this.sessionService.clearCurrentUser();
+	public logout() {
+		this.router.navigate(['/logout']);
 	}
 }

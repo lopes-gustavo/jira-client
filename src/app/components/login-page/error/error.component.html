@@ -1,0 +1,14 @@
+<div *ngIf="isGenericError" class="small color-danger mb-3 mt-1">
+
+	Erro ao conectar no JIRA.
+	<br>
+	Por favor, verifique se:
+	<ul>
+		<li>está conectado à VPN</li>
+		<li>está com a <a (click)="clearDisclaimerAgreement()" routerLink="/disclaimer">extensão</a> instalada e habilitada
+		</li>
+	</ul>
+
+</div>
+
+<div *ngIf="!isGenericError" class="small color-danger mb-3 mt-1">{{ displayError }}</div>

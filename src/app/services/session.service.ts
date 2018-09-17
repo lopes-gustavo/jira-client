@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Jira } from '../models/jira.model';
-import { Nullable } from '../types/nullable';
+import { Jira } from '../models';
+import { Nullable } from '../types';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,6 +11,7 @@ export class SessionService {
 	private currentUserSource = new BehaviorSubject<Nullable<Jira.Author>>(null);
 
 	currentUser = this.currentUserSource.asObservable();
+	get currentUserSnapshot() { return this.currentUserSource.getValue(); }
 
 	constructor() {
 		// Tenta buscar no local storage ou session storage.
@@ -39,5 +40,17 @@ export class SessionService {
 		sessionStorage.removeItem('currentUser');
 
 		this.currentUserSource.next(null);
+	}
+
+	public isDisclaimerAgreed(): boolean {
+		return sessionStorage.getItem('disclaimer') === 'true';
+	}
+
+	public saveDisclaimerAgreement() {
+		sessionStorage.setItem('disclaimer', 'true');
+	}
+
+	public clearDisclaimerAgreement() {
+		sessionStorage.removeItem('disclaimer');
 	}
 }

@@ -2,14 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Jira</title>
-	<script>document.write('<base href="' + document.location + '" />');</script>
-	<!-- <base href="/"> -->
+  <title>Jira Client</title>
+	<base href="/">
+	<!--<script>document.write('<base href="' + document.location + '" />');</script>-->
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <app-root>Loading...</app-root>
+  <app-root>
+		<script>
+			const isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+			if (isIE) {
+				document.write("Internet explorer não é suportado no momento, por favor, utilize Chrome ou Firefox.")
+			}
+			else {
+				document.write("Carregando...");
+			}
+		</script>
+	</app-root>
 </body>
 </html>

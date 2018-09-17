@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Jira } from '../../models/jira.model';
-import { SessionService } from '../../services/session.service';
-import { ServerService } from '../../services/server.service';
+import { Router } from '@angular/router';
+import { BrowserService, IBrowser, ServerService, SessionService } from '../../services';
+import { Jira } from '../../models';
+import { Nullable } from '../../types';
 
 @Component({
 	selector: 'app-login-page',
@@ -14,14 +16,31 @@ export class LoginPageComponent {
 		password: '',
 		savePassword: false,
 	};
-	public error: string;
+	public error: Nullable<HttpErrorResponse>;
+	currentBrowser: IBrowser;
 
-	constructor(private serverService: ServerService, private sessionService: SessionService) { }
+	constructor(
+		private serverService: ServerService,
+		private sessionService: SessionService,
+		private router: Router,
+		browser: BrowserService
+	) {
 
-	public login(form: { user: string, password: string, savePassword: boolean }) {
+		// Se já está logado, redireciona para página principal
+		if (this.sessionService.currentUserSnapshot) {
+			this.router.navigate(['/']);
+		}
+
+		this.currentBrowser = browser.current;
+	}
+
+	login(form: { user: string, password: string, savePassword: boolean }) {
+		this.error = null;
+
 		const token = btoa(`${form.user}:${form.password}`);
 
-		this.serverService.login(token).subscribe((user: Jira.Author) => {
+		this.serverService.login(token).subscribe(
+			(user: Jira.Author) => {
 				const currentUser = {...user, token};
 
 				this.loginFormModel = {
@@ -31,19 +50,10 @@ export class LoginPageComponent {
 				};
 
 				this.sessionService.setCurrentUser(currentUser, form.savePassword);
+
+				this.router.navigate(['/']);
 			},
-			(error) => {
-				switch (error.status) {
-					case 401:
-						this.error = 'Usuário ou senha inválido';
-						break;
-					case 404:
-						this.error = 'Servidor não encontrado. Verifique se está conectado à VPN';
-						break;
-					default:
-						this.error = `Erro não conhecido.\n status:${error.status}`;
-				}
-			},
+			(error) => this.error = error,
 		);
 
 		// this._getLogin((user: Jira.Author) => {
@@ -61,20 +71,23 @@ export class LoginPageComponent {
 	}
 
 	// TODO: Remover esse método
-/*
-	private _getLogin(f: (user: Jira.Author) => void): void {
-		f(new class implements Jira.Author {
-			avatarUrls: Jira.AvatarUrls;
-			self: string;
-			timeZone: string;
-			active: boolean = true;
-			displayName: string = 'mDisplayName';
-			emailAddress: string = 'mEmailAddress';
-			key: string = 'mKey';
-			name: string = 'mName';
-			token: string = 'mToken';
-		});
-	}
-*/
+	/*
+	 private _getLogin(f: (user: Jira.Author) => void): void {
+	 f(new class implements Jira.Author {
+	 avatarUrls: Jira.AvatarUrls;
+	 self: string;
+	 timeZone: string;
+	 active: boolean = true;
+	 displayName: string = 'mDisplayName';
+	 emailAddress: string = 'mEmailAddress';
+	 key: string = 'mKey';
+	 name: string = 'mName';
+	 token: string = 'mToken';
+	 });
+	 }
+	 */
 
+	clearDisclaimerAgreement() {
+		this.sessionService.clearDisclaimerAgreement();
+	}
 }

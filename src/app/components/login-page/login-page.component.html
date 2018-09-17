@@ -1,16 +1,22 @@
-<div class="login-page">
-	<div class="login-popup d-flex align-items-center justify-content-center">
-		<form class="form justify-content-center p-3"
-					#myLoginForm="ngForm"
-					(ngSubmit)="login(myLoginForm.value)"
-					ngNativeValidate>
+<div class="fixed-top w-100 h-100 bg-light d-flex justify-content-around align-items-center">
+
+	<div class="fixed-top w-100 h-100 background-image"></div>
+
+	<div class="fixed-top w-100 h-100 overlay"></div>
+
+	<div class="shadow">
+
+		<form #myLoginForm="ngForm"
+			class="form box justify-content-center p-4 bg-white"
+			(ngSubmit)="login(myLoginForm.value)"
+			ngNativeValidate>
 
 			<div class="form-group d-flex flex-column align-items-start">
 				<label for="user">Usuário</label>
 				<input type="text"
 							 placeholder="Username (xb207090)"
 							 id="user"
-							 [(ngModel)]="loginFormModel.user"
+					[(ngModel)]="loginFormModel.user"
 							 name="user"
 							 class="form-control mr-sm-3"
 							 required>
@@ -20,23 +26,26 @@
 				<label for="password">Senha</label>
 				<input type="password"
 							 id="password"
-							 [(ngModel)]="loginFormModel.password"
+					[(ngModel)]="loginFormModel.password"
 							 name="password"
 							 class="form-control mr-sm-3"
 							 required>
 			</div>
 
-			<div class="form-group">
+			<div class="group">
 				<input type="checkbox"
 							 id="savePassword"
-							 [(ngModel)]="loginFormModel.savePassword"
+					[(ngModel)]="loginFormModel.savePassword"
 							 name="savePassword"
-							 class="mr-2"><label for="savePassword"> Salvar senha?</label>
+							 class="mr-2"><label for="savePassword">Salvar senha?</label>
 			</div>
 
-			<div *ngIf="!!error" class="small color-danger"></div>
+			<app-error *ngIf="!!error" [error]="error"></app-error>
 
-			<button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
+			<small><a (click)="clearDisclaimerAgreement()" routerLink="/disclaimer">Ver termos de uso</a></small>
+			<button type="submit" class="btn btn-primary btn-block">Login</button>
+
 		</form>
+
 	</div>
 </div>
