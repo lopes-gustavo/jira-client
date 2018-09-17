@@ -7,15 +7,15 @@ import localePt from '@angular/common/locales/pt';
 
 import { AppRouting } from './app.routing';
 import { AppComponent } from './app.component';
-import { LoginPageComponent } from './components/login-page/login-page.component';
-import { LogoutPageComponent } from './components/logout-page/logout-page.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { HeaderComponent } from './components/header/header.component';
-import { TableComponent } from './components/table/table.component';
-import { MainComponent } from './components/main/main.component';
-import { ErrorComponent } from './components/login-page/error/error.component';
-import { DisclaimerComponent } from './components/disclaimer/disclaimer.component';
-import { HomeComponent } from './components/home/home.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { LogoutPageComponent } from './pages/logout-page/logout-page.component';
+import { FooterComponent } from './pages/home/footer/footer.component';
+import { HeaderComponent } from './pages/home/header/header.component';
+import { TableComponent } from './pages/home/main/table/table.component';
+import { MainComponent } from './pages/home/main/main.component';
+import { ErrorComponent } from './pages/login-page/error/error.component';
+import { DisclaimerComponent } from './pages/disclaimer/disclaimer.component';
+import { HomeComponent } from './pages/home/home.component';
 import { CapitalizeFirstPipe } from './pipes/capitalize-first.pipe';
 
 registerLocaleData(localePt);

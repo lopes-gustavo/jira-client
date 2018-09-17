@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Jira } from '../../models';
-import { SessionService } from '../../services';
-import { Nullable } from '../../types';
+import { Jira } from '../../../models';
+import { SessionService } from '../../../services';
+import { Nullable } from '../../../types';
 
 @Component({
 	selector: 'app-header',

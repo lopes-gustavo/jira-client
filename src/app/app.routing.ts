@@ -1,11 +1,11 @@
 import { RouterModule, Routes } from '@angular/router';
-import { LoginPageComponent } from './components/login-page/login-page.component';
-import { DisclaimerComponent } from './components/disclaimer/disclaimer.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { DisclaimerComponent } from './pages/disclaimer/disclaimer.component';
 import { NgModule } from '@angular/core';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { AuthGuard } from './guards/auth.guard';
 import { DisclaimerGuard } from './guards/disclaimer.guard';
-import { LogoutPageComponent } from './components/logout-page/logout-page.component';
+import { LogoutPageComponent } from './pages/logout-page/logout-page.component';
 
 const appRoutes: Routes = [
 	{ path: 'disclaimer', component: DisclaimerComponent },

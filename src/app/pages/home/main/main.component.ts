@@ -1,9 +1,9 @@
 import * as moment from 'moment';
 import { forkJoin } from 'rxjs';
 import { Component } from '@angular/core';
-import { Nullable } from '../../types';
-import { Jira } from '../../models';
-import { ServerService, SessionService } from '../../services';
+import { Nullable } from '../../../types';
+import { Jira } from '../../../models';
+import { ServerService, SessionService } from '../../../services';
 
 @Component({
 	selector: 'app-main',
