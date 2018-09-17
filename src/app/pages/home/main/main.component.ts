@@ -28,6 +28,8 @@ export class MainComponent {
 
 	dateRange: moment.Moment[] = [];
 
+	displayOverlay: boolean = true;
+
 	constructor(private serverService: ServerService, private sessionService: SessionService) {
 		this.sessionService.currentUser.subscribe(currentUser => {
 			this.currentUser = currentUser;
@@ -60,12 +62,19 @@ export class MainComponent {
 		else return '';
 	}
 
-	generateReports(form: {
-		initialDate: string;
-		finalDate: string;
-	}): boolean {
+	generateReports(form: { initialDate: string; finalDate: string }): boolean {
 
-		if (!form.initialDate || !form.finalDate || form.initialDate > form.finalDate) {
+		// TODO: Criar um component para `alert`
+		if (!form.initialDate) {
+			alert('Por favor, preencha a data inicial');
+			return false;
+		}
+		if (!form.finalDate) {
+			alert('Por favor, preencha a data final');
+			return false;
+		}
+		if (form.initialDate > form.finalDate) {
+			alert('A data inicial não pode ser maior que a data final');
 			return false;
 		}
 
@@ -81,6 +90,8 @@ export class MainComponent {
 			).subscribe(([jiraData, jiraTeamData]: [Jira.SearchResponse, Jira.SearchResponse]) => {
 				this.updateJiraData(jiraData);
 				this.updateTeamJiraData(jiraTeamData);
+
+				this.displayOverlay = false;
 			});
 
 			// this._getJiraData(this.updateJiraData.bind(this));
@@ -437,17 +448,9 @@ class JiraData {
 	public currentUserIssues: Worklog[] = [];
 	public teamWorklogByDay: { [name: string]: { [value: string]: number } } = {};
 
-	public isFulfilled(): boolean {
-		return (
-			!!this.currentUserIssues.length &&
-			!!Object.getOwnPropertyNames(this.currentUserWorklogByDay).length &&
-			!!Object.getOwnPropertyNames(this.teamWorklogByDay).length
-		);
-	}
-
-	public clear(): void {{
+	public clear(): void {
 		this.currentUserWorklogByDay = {};
 		this.currentUserIssues = [];
 		this.teamWorklogByDay = {};
-	}}
+	}
 }
