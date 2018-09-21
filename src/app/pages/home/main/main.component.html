@@ -43,7 +43,7 @@
 
 		<!-- Horas lançadas por tarefa por dia -->
 		<app-table title="Horas lançadas por tarefa por dia" [condition]="jiraData.currentUserIssues.length">
-			<table class="table table-hover">
+			<table  class="table table-hover">
 
 				<thead>
 				<tr>
@@ -113,7 +113,7 @@
 
 		<!-- Horas lançadas do time -->
 		<app-table title="Horas lançadas do time" [condition]="keys(jiraData.teamWorklogByDay).length">
-			<div class="overflow-x-auto">
+			<div id="tableId" class="overflow-x-auto">
 				<table class="table table-sm table-bordered table-hover text-center">
 
 					<thead>

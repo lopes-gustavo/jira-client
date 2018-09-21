@@ -1,14 +1,21 @@
 <div class="row">
 	<div class="col-12">
-		<div class="card mb-3">
-			<div class="card-header">
-				<i class="fa fa-table mr-2"></i>
-				<span>{{ title }}</span>
+		<div class="card mb-3" #content>
+
+			<div class="card-header d-flex align-items-center justify-content-between">
+				<div>
+					<i class="fa fa-table mr-2"></i>
+					<span>{{ title }}</span>
+				</div>
+				<div>
+					<button class="btn btn-primary btn-sm" (click)="copy('tableId')">Copy</button>
+				</div>
 			</div>
 			<div class="card-body" *ngIf="condition">
 				<ng-content></ng-content>
 			</div>
 			<!--<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>-->
+
 		</div>
 	</div>
 </div>

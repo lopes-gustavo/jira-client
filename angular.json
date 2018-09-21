@@ -28,8 +28,9 @@
               "node_modules/font-awesome/css/font-awesome.min.css"
             ],
             "scripts": [
-              "node_modules/moment/min/moment.min.js"
-            ]
+              "node_modules/moment/min/moment.min.js",
+							"node_modules/clipboard-polyfill/build/clipboard-polyfill.js"
+						]
           },
           "configurations": {
             "production": {
@@ -79,7 +80,9 @@
               "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": [],
+            "scripts": [
+							"node_modules/clipboard-polyfill/build/clipboard-polyfill.js"
+						],
             "assets": [
               "src/favicon.png",
               "src/assets"
