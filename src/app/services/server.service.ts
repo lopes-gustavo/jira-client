@@ -25,7 +25,7 @@ export class ServerService {
 				'Authorization': `Basic ${token}`,
 			}),
 			params: {
-				jql: `assignee = ${name} AND project = SSAZBR AND ` +
+				jql: `worklogAuthor = ${name} AND project = SSAZBR AND ` +
 					`(created > ${moment(initialDate).format('YYYY-MM-DD')} AND created < ${moment(finalDate).format('YYYY-MM-DD')})`,
 				startAt: '0',
 				maxResults: '1000',
@@ -54,7 +54,8 @@ export class ServerService {
 			}),
 			params: {
 				// tslint:disable-next-line:max-line-length
-				jql: `project = SSAZBR AND (created > ${moment(initialDate).format('YYYY-MM-DD')} AND created < ${moment(finalDate).format('YYYY-MM-DD')})`,
+				jql: `project = SSAZBR AND ` +
+					`(created > ${moment(initialDate).format('YYYY-MM-DD')} AND created < ${moment(finalDate).format('YYYY-MM-DD')})`,
 				startAt: '0',
 				maxResults: '1000',
 				fields: [

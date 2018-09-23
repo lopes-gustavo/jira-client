@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Jira } from '../models';
 import { Nullable } from '../types';
@@ -8,10 +7,7 @@ import { Nullable } from '../types';
 })
 export class SessionService {
 
-	private currentUserSource = new BehaviorSubject<Nullable<Jira.Author>>(null);
-
-	currentUser = this.currentUserSource.asObservable();
-	get currentUserSnapshot() { return this.currentUserSource.getValue(); }
+	currentUser: Nullable<Jira.Author>;
 
 	constructor() {
 		// Tenta buscar no local storage ou session storage.
@@ -20,7 +16,7 @@ export class SessionService {
 		const localStorageCurrentUser = JSON.parse(localStorage.getItem('currentUser') as string);
 		const sessionStorageCurrentUser = JSON.parse(sessionStorage.getItem('currentUser') as string);
 
-		this.currentUserSource.next(localStorageCurrentUser || sessionStorageCurrentUser);
+		this.currentUser = localStorageCurrentUser || sessionStorageCurrentUser;
 	}
 
 	public setCurrentUser(user: Jira.Author, preserveSession: boolean): void {
@@ -32,14 +28,14 @@ export class SessionService {
 			localStorage.removeItem('currentUser');
 		}
 
-		this.currentUserSource.next(user);
+		this.currentUser = user;
 	}
 
 	public clearCurrentUser(): void {
 		localStorage.removeItem('currentUser');
 		sessionStorage.removeItem('currentUser');
 
-		this.currentUserSource.next(null);
+		this.currentUser = null;
 	}
 
 	public isDisclaimerAgreed(): boolean {

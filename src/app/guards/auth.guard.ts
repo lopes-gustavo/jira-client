@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
 	}
 
 	canActivate(): boolean {
-		if (!this.sessionService.currentUserSnapshot) {
+		if (!this.sessionService.currentUser) {
 			this.router.navigate(['/login']);
 
 			return false;

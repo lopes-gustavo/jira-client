@@ -1,7 +1,6 @@
 import * as moment from 'moment';
 import { forkJoin } from 'rxjs';
 import { Component } from '@angular/core';
-import { Nullable } from '../../../types';
 import { Jira } from '../../../models';
 import { ServerService, SessionService } from '../../../services';
 
@@ -25,20 +24,18 @@ export class MainComponent {
 		finalDate: moment().format(`YYYY-MM-DD`),
 	};
 
-	currentUser: Nullable<Jira.Author> = null;
+	currentUser: Jira.Author;
 
 	dateRange: moment.Moment[] = [];
 	private serverUrl: string;
 
 	constructor(private serverService: ServerService, private sessionService: SessionService) {
-		this.sessionService.currentUser.subscribe(currentUser => {
+		const currentUser = this.sessionService.currentUser;
+		if (currentUser) {
 			this.currentUser = currentUser;
-
-			if (!currentUser) {
-				this.clearData();
-				this.clearSearchFormData();
-			}
-		});
+		} else {
+			throw new Error();
+		}
 
 		this.serverUrl = sessionService.getServerUrl();
 	}
@@ -123,13 +120,6 @@ export class MainComponent {
 		this.dateRange = [];
 	}
 
-	private clearSearchFormData() {
-		this.searchFormModel = {
-			initialDate: moment().add(-2, `weeks`).format(`YYYY-MM-DD`),
-			finalDate: moment().format(`YYYY-MM-DD`),
-		};
-	}
-
 	private initializeDateRangeArray({initialDate, finalDate}: { initialDate: string, finalDate: string }) {
 		const initialDateMoment = moment(initialDate);
 		const finalDateMoment = moment(finalDate);
@@ -164,7 +154,9 @@ export class MainComponent {
 				issue.fields.worklog.worklogs.push(new Jira.Issue.Worklogs());
 			}
 
-			issue.fields.worklog.worklogs.forEach(worklog => {
+			issue.fields.worklog.worklogs
+				.filter(worklog => worklog.author.key === this.currentUser.key)
+				.forEach(worklog => {
 				worklog.timeSpentHours = worklog.timeSpentSeconds / 60 / 60;
 
 				this.createJiraWorklogByDaysObject(issue, worklog);

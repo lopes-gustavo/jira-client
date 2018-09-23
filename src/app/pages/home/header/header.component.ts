@@ -14,7 +14,7 @@ export class HeaderComponent {
 	public currentUser: Nullable<Jira.Author>;
 
 	constructor(private sessionService: SessionService, private router: Router) {
-		this.sessionService.currentUser.subscribe(currentUser => this.currentUser = currentUser);
+		this.currentUser = this.sessionService.currentUser;
 	}
 
 	public logout() {

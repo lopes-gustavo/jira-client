@@ -23,7 +23,7 @@ export class LoginPageComponent {
 	) {
 
 		// Se já está logado, redireciona para página principal
-		if (this.sessionService.currentUserSnapshot) {
+		if (this.sessionService.currentUser) {
 			this.router.navigate(['/']);
 		}
 
