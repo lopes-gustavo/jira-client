@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-		"build": "ng build --prod",
+		"build": "npm run build:en && npm run build:pt",
+		"build:en": "ng build --configuration=production",
+		"build:pt": "ng build --configuration=production-pt",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

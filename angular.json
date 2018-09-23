@@ -47,10 +47,36 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+							"buildOptimizer": true,
+							"baseHref": "/en/",
+							"outputPath": "dist/jira/en"
 						},
 						"pt": {
 							"aot": true,
+							"baseHref": "/pt/",
+							"outputPath": "dist/jira/pt",
+							"i18nFile": "src/locale/messages.pt.xlf",
+							"i18nFormat": "xlf",
+							"i18nLocale": "pt",
+							"i18nMissingTranslation": "error"
+						},
+						"production-pt": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": false,
+							"extractCss": true,
+							"namedChunks": false,
+							"aot": true,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"baseHref": "/pt/",
 							"outputPath": "dist/jira/pt",
 							"i18nFile": "src/locale/messages.pt.xlf",
 							"i18nFormat": "xlf",
