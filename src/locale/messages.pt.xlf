@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="pt" datatype="plaintext" original="ng2.template">
+		<body>
+			<!-- Disclaimer page -->
+			<trans-unit id="disclaimer_header_important" datatype="html">
+				<source>Important</source>
+				<target>Importante</target>
+			</trans-unit>
+			<trans-unit id="disclaimer_extension_title" datatype="html">
+				<source>It's necessary the use of an extension to overcome some JIRA limitations</source>
+				<target>É necessário o uso de uma extensão para superar uma limitação do JIRA</target>
+			</trans-unit>
+			<trans-unit id="disclaimer_recommendation" datatype="html">
+				<source>
+					We recommend for your browser (<x id="INTERPOLATION" equiv-text="{{ currentBrowser.name }}"/>) the following
+					extension:
+					<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>CORS
+					<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+				</source>
+				<target>
+					Recomendamos para seu browser (<x id="INTERPOLATION" equiv-text="{{ currentBrowser.name }}"/>) a extensão:
+					<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>CORS
+					<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+				</target>
+			</trans-unit>
+			<trans-unit id="disclaimer_configure" datatype="html">
+				<source>CONFIGURE the extension</source>
+				<target>CONFIGURE a extensão</target>
+			</trans-unit>
+			<trans-unit id="disclaimer_security_info" datatype="html">
+				<source>
+					This system does not use secure ways to save your password. Do NOT use it on public computers.
+				</source>
+				<target>
+					Esse sistema não utiliza de meios seguros para armazenar sua senha. Não utilize-o em computadores públicos.
+				</target>
+			</trans-unit>
+			<trans-unit id="disclaimer_default_configuration" datatype="html">
+				<source>(1) the extension, on its default configurations, opens some security holes in your computer</source>
+				<target>(1) nas configurações padrões, a extensão abre brechas de segurança em seu computador</target>
+			</trans-unit>
+			<trans-unit id="disclaimer_button_agreement" datatype="html">
+				<source>I have read and I agree with the above information</source>
+				<target>Li e concordo com as afirmações acima</target>
+			</trans-unit>
+
+			<!-- Login page -->
+			<trans-unit id="login_username" datatype="html">
+				<source>Username</source>
+				<target>Usuário</target>
+			</trans-unit>
+			<trans-unit id="login_password" datatype="html">
+				<source>Password</source>
+				<target>Senha</target>
+			</trans-unit>
+			<trans-unit id="login_save_password" datatype="html">
+				<source>Save password</source>
+				<target>Salvar senha</target>
+			</trans-unit>
+			<trans-unit id="login_see_usage_terms" datatype="html">
+				<source>See usage terms</source>
+				<target>Ver termos de uso</target>
+			</trans-unit>
+
+			<!-- Home page -->
+			<trans-unit id="home_header_not_logged_in" datatype="html">
+				<source>Not logged in</source>
+				<target>Não logado</target>
+			</trans-unit>
+			<trans-unit id="home_main_initial_date" datatype="html">
+				<source>Initial date</source>
+				<target>Data inicial</target>
+			</trans-unit>
+			<trans-unit id="home_main_last_date" datatype="html">
+				<source>Last date</source>
+				<target>Data final</target>
+			</trans-unit>
+			<trans-unit id="home_footer_useful_links" datatype="html">
+				<source>Useful links</source>
+				<target>Links úteis</target>
+			</trans-unit>
+			<trans-unit id="home_main_generate_reports" datatype="html">
+				<source>Generate reports</source>
+				<target>Gerar relatórios</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

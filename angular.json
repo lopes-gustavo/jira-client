@@ -48,7 +48,15 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
-            }
+						},
+						"pt": {
+							"aot": true,
+							"outputPath": "dist/jira/pt",
+							"i18nFile": "src/locale/messages.pt.xlf",
+							"i18nFormat": "xlf",
+							"i18nLocale": "pt",
+							"i18nMissingTranslation": "error"
+						}
           }
         },
         "serve": {
@@ -59,7 +67,10 @@
           "configurations": {
             "production": {
               "browserTarget": "jira:build:production"
-            }
+						},
+						"pt": {
+							"browserTarget": "jira:build:pt"
+						}
           }
         },
         "extract-i18n": {

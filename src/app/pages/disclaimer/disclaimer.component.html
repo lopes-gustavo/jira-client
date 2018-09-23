@@ -2,20 +2,23 @@
 
 	<div class="box bg-white p-4 shadow">
 
-		<h1>Importante</h1>
+		<h1 i18n="@@disclaimer_header_important">Important</h1>
 
 		<main>
 			<ul>
 
-				<li>É necessário o uso de uma extensão para superar uma limitação do JIRA
+				<li>
+					<ng-container i18n="@@disclaimer_extension_title">
+						It's necessary the use of an extension to overcome some JIRA limitations
+					</ng-container>
 
 					<ul *ngIf="currentBrowser.extensionUrl">
-						<li>
-							Recomendamos para seu browser ({{ currentBrowser.name }}) a extensão:
+						<li i18n="@@disclaimer_recommendation">
+							We recommend for your browser ({{ currentBrowser.name }}) the following extension:
 							<a [href]="currentBrowser.extensionUrl" target="_blank">CORS</a>
 						</li>
 						<li>
-							<strong>CONFIGURE a extensão</strong> (1)
+							<strong i18n="@@disclaimer_configure">CONFIGURE the extension</strong> (1)
 							<br>
 							Remova o valor padrão e adicione o seguinte: <code>{{ currentBrowser.extensionPattern }}</code>
 						</li>
@@ -32,17 +35,19 @@
 
 				</li>
 
-				<li>
-					Esse sistema não utiliza de meios seguros para armazenar sua senha. Não utilize-o em computadores públicos.
+				<li i18n="@@disclaimer_security_info">
+					This system does not use secure ways to save your password. Do NOT use it on public computers.
 				</li>
 
 			</ul>
 
-			<span *ngIf="currentBrowser.extensionUrl">(1) nas configurações padrões, a extensão abre brechas de segurança em seu computador</span>
+			<span *ngIf="currentBrowser.extensionUrl" i18n="@@disclaimer_default_configuration">(1) the extension, on its default configurations, opens some security holes in your computer</span>
 		</main>
 
 		<div class="mt-4 d-flex justify-content-center">
-			<button (click)="onAgreeButtonClick()" class="btn btn-primary">Li e concordo com as afirmações acima</button>
+			<button (click)="onAgreeButtonClick()" class="btn btn-primary" i18n="@@disclaimer_button_agreement">
+				I have read and I agree with the above information
+			</button>
 		</div>
 
 	</div>
