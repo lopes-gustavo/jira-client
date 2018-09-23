@@ -11,11 +11,7 @@ import { Nullable } from '../../types';
 	styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent {
-	public loginFormModel = {
-		user: '',
-		password: '',
-		savePassword: false,
-	};
+	public loginFormModel = new LoginFormModel();
 	public error: Nullable<HttpErrorResponse>;
 	currentBrowser: IBrowser;
 
@@ -34,7 +30,7 @@ export class LoginPageComponent {
 		this.currentBrowser = browser.current;
 	}
 
-	login(form: { user: string, password: string, savePassword: boolean }) {
+	login(form: LoginFormModel) {
 		this.error = null;
 
 		const token = btoa(`${form.user}:${form.password}`);
@@ -43,11 +39,7 @@ export class LoginPageComponent {
 			(user: Jira.Author) => {
 				const currentUser = {...user, token};
 
-				this.loginFormModel = {
-					user: '',
-					password: '',
-					savePassword: false,
-				};
+				this.loginFormModel.clear();
 
 				this.sessionService.setCurrentUser(currentUser, form.savePassword);
 
@@ -89,5 +81,17 @@ export class LoginPageComponent {
 
 	clearDisclaimerAgreement() {
 		this.sessionService.clearDisclaimerAgreement();
+	}
+}
+
+class LoginFormModel {
+	user: string;
+	password: string;
+	savePassword: boolean;
+
+	public clear() {
+		this.user = '';
+		this.password = '';
+		this.savePassword = false;
 	}
 }
