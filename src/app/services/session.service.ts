@@ -53,4 +53,22 @@ export class SessionService {
 	public clearDisclaimerAgreement() {
 		sessionStorage.removeItem('disclaimer');
 	}
+
+	public saveServerUrl(serverUrl: string) {
+		sessionStorage.setItem('serverUrl', serverUrl);
+	}
+
+	public getServerUrl() {
+		const serverUrl = sessionStorage.getItem('serverUrl');
+		if (!serverUrl) {
+			throw new Error('serverUrl not defined');
+		}
+
+		return serverUrl;
+	}
+
+	public clearServerUrl() {
+		sessionStorage.removeItem('serverUrl');
+	}
+
 }

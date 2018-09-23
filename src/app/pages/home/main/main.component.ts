@@ -14,8 +14,9 @@ export class MainComponent {
 	sortParams = {
 		isDesc: false,
 		column: 'timeSpentHours',
-		direction: 1 | -1,
+		direction: 1,
 	};
+	displayOverlay = true;
 
 	jiraData = new JiraData();
 
@@ -27,8 +28,7 @@ export class MainComponent {
 	currentUser: Nullable<Jira.Author> = null;
 
 	dateRange: moment.Moment[] = [];
-
-	displayOverlay: boolean = true;
+	private serverUrl: string;
 
 	constructor(private serverService: ServerService, private sessionService: SessionService) {
 		this.sessionService.currentUser.subscribe(currentUser => {
@@ -39,6 +39,8 @@ export class MainComponent {
 				this.clearSearchFormData();
 			}
 		});
+
+		this.serverUrl = sessionService.getServerUrl();
 	}
 
 	sortColumnBy(property: string) {
@@ -47,7 +49,7 @@ export class MainComponent {
 		this.sortParams.direction = this.sortParams.isDesc ? 1 : -1;
 
 		this.sortJiraIssuesByWorklog();
-	};
+	}
 
 	keys(value: any): { key: string, value: any }[] {
 		const keys: { key: string, value: any }[] = [];
@@ -56,10 +58,17 @@ export class MainComponent {
 	}
 
 	getFaIconClassFor(column: string) {
-		if (this.sortParams.column !== column) return 'fa fa-sort';
-		if (this.sortParams.column === column && this.sortParams.isDesc) return 'fa fa-sort-desc';
-		if (this.sortParams.column === column && !this.sortParams.isDesc) return 'fa fa-sort-asc';
-		else return '';
+		if (this.sortParams.column !== column) {
+			return 'fa fa-sort';
+		}
+		if (this.sortParams.column === column && this.sortParams.isDesc) {
+			return 'fa fa-sort-desc';
+		}
+		if (this.sortParams.column === column && !this.sortParams.isDesc) {
+			return 'fa fa-sort-asc';
+		} else {
+			return '';
+		}
 	}
 
 	generateReports(form: { initialDate: string; finalDate: string }): boolean {
@@ -85,8 +94,8 @@ export class MainComponent {
 		if (this.currentUser) {
 
 			forkJoin(
-				this.serverService.getJiraData(this.currentUser.token, this.currentUser.name, form.initialDate, form.finalDate),
-				this.serverService.getTeamJiraData(this.currentUser.token, form.initialDate, form.finalDate),
+				this.serverService.getJiraData(this.currentUser.token, this.serverUrl, this.currentUser.name, form.initialDate, form.finalDate),
+				this.serverService.getTeamJiraData(this.currentUser.token, this.serverUrl, form.initialDate, form.finalDate),
 			).subscribe(([jiraData, jiraTeamData]: [Jira.SearchResponse, Jira.SearchResponse]) => {
 				this.updateJiraData(jiraData);
 				this.updateTeamJiraData(jiraTeamData);
@@ -102,7 +111,7 @@ export class MainComponent {
 	}
 
 	getWorklogHoursOnDay(worklogHours: { key: string, value: any }, day: string) {
-		return worklogHours.value[moment(day).format('YYYY-MM-DD')] | 0;
+		return worklogHours.value[moment(day).format('YYYY-MM-DD')] || 0;
 	}
 
 	isWeekend(date: string) {
@@ -135,12 +144,10 @@ export class MainComponent {
 
 			if (a[column] < b[column]) {
 				return -1 * this.sortParams.direction;
-			}
-			else if (a[column] > b[column]) {
+			} else if (a[column] > b[column]) {
 				// noinspection PointlessArithmeticExpressionJS
 				return 1 * this.sortParams.direction;
-			}
-			else {
+			} else {
 				return 0;
 			}
 		});
@@ -195,7 +202,9 @@ export class MainComponent {
 		let issueCreatedDate = '-';
 		if (worklog.started) {
 			issueCreatedDate = moment(worklog.started).format('YYYY-MM-DD');
-			this.jiraData.currentUserWorklogByDay[issueCreatedDate] = (this.jiraData.currentUserWorklogByDay[issueCreatedDate] | 0) + worklog.timeSpentHours;
+
+			this.jiraData.currentUserWorklogByDay[issueCreatedDate]
+				= (this.jiraData.currentUserWorklogByDay[issueCreatedDate] || 0) + worklog.timeSpentHours;
 		}
 
 		this.jiraData.currentUserIssues.push({
@@ -218,7 +227,7 @@ export class MainComponent {
 			const teamWorklogByAssignee = this.jiraData.teamWorklogByDay[assigneeName] || {};
 
 			// Adiciona o worklog.timeSpentHours no jiraTeamWorklog. Seta o mesmo como 0 caso não exista
-			teamWorklogByAssignee[issueCreatedDate] = (teamWorklogByAssignee[issueCreatedDate] | 0) + worklog.timeSpentHours;
+			teamWorklogByAssignee[issueCreatedDate] = (teamWorklogByAssignee[issueCreatedDate] || 0) + worklog.timeSpentHours;
 
 			this.jiraData.teamWorklogByDay[assigneeName] = teamWorklogByAssignee;
 		}

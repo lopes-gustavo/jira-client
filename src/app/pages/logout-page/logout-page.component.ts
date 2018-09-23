@@ -16,6 +16,7 @@ export class LogoutPageComponent {
 	private logout() {
 		this.sessionService.clearCurrentUser();
 		this.sessionService.clearDisclaimerAgreement();
+		this.sessionService.clearServerUrl();
 		this.router.navigate(['/login']);
 	}
 

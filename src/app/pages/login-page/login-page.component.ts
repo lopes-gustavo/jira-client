@@ -35,13 +35,15 @@ export class LoginPageComponent {
 
 		const token = btoa(`${form.user}:${form.password}`);
 
-		this.serverService.login(token).subscribe(
+		this.serverService.login(token, form.server).subscribe(
 			(user: Jira.Author) => {
 				const currentUser = {...user, token};
 
 				this.loginFormModel.clear();
 
 				this.sessionService.setCurrentUser(currentUser, form.savePassword);
+
+				this.sessionService.saveServerUrl(form.server);
 
 				this.router.navigate(['/']);
 			},
@@ -87,11 +89,13 @@ export class LoginPageComponent {
 class LoginFormModel {
 	user: string;
 	password: string;
+	server: string;
 	savePassword: boolean;
 
 	public clear() {
 		this.user = '';
 		this.password = '';
+		this.server = '';
 		this.savePassword = false;
 	}
 }

@@ -46,6 +46,10 @@
 			</trans-unit>
 
 			<!-- Login page -->
+			<trans-unit id="login_server" datatype="html">
+				<source>Server</source>
+				<target>Servidor</target>
+			</trans-unit>
 			<trans-unit id="login_username" datatype="html">
 				<source>Username</source>
 				<target>Usuário</target>
