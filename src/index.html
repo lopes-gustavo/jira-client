@@ -12,6 +12,15 @@
 <body>
   <app-root>
 		<script>
+			// Redirect HTTPS to HTTP
+			const href = location.href.split('://');
+			const isHttps = href[0] === 'https';
+
+			if (isHttps) {
+				location.replace(`http://${href[1]}`)
+			}
+
+			// Show warning to Internet Explorer users
 			const isIE = /*@cc_on!@*/false || !!document.documentMode;
 
 			if (isIE) {
