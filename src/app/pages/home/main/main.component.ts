@@ -182,7 +182,7 @@ export class MainComponent {
 			issue.fields.worklog.worklogs.forEach(worklog => {
 				worklog.timeSpentHours = worklog.timeSpentSeconds / 60 / 60;
 
-				this.createTeamJiraWorklogByDaysObject(issue, worklog);
+				this.createTeamJiraWorklogByDaysObject(worklog);
 			});
 
 			this.sortJiraIssuesByWorklog();
@@ -209,8 +209,8 @@ export class MainComponent {
 		});
 	}
 
-	private createTeamJiraWorklogByDaysObject(issue: Jira.Issue, worklog: Jira.Issue.IWorklogs) {
-		const assignee = issue.fields.assignee;
+	private createTeamJiraWorklogByDaysObject(worklog: Jira.Issue.IWorklogs) {
+		const assignee = worklog.author;
 
 		if (worklog.started && assignee) {
 			const issueCreatedDate = moment(worklog.started).format('YYYY-MM-DD');
