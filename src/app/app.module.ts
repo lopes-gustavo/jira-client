@@ -1,8 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
+import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 
 import { AppRouting } from './app.routing';
@@ -39,6 +47,13 @@ registerLocaleData(localePt);
 		FormsModule,
 		AppRouting,
 		HttpClientModule,
+		BrowserAnimationsModule,
+		MatCardModule,
+		MatIconModule,
+		MatButtonModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatCheckboxModule,
 	],
 	providers: [
 		{provide: LOCALE_ID, useValue: 'pt-BR'}

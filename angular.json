@@ -23,8 +23,11 @@
               "src/assets"
             ],
             "styles": [
+              {
+                "input": "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              },
+							"src/_variables.scss",
               "src/styles.scss",
-              "node_modules/bootswatch/dist/yeti/bootstrap.min.css",
               "node_modules/font-awesome/css/font-awesome.min.css"
             ],
             "scripts": [
@@ -47,42 +50,42 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-							"buildOptimizer": true,
-							"baseHref": "/en/",
-							"outputPath": "dist/jira/en"
-						},
-						"pt": {
-							"aot": true,
-							"baseHref": "/pt/",
-							"outputPath": "dist/jira/pt",
-							"i18nFile": "src/locale/messages.pt.xlf",
-							"i18nFormat": "xlf",
-							"i18nLocale": "pt",
-							"i18nMissingTranslation": "error"
-						},
-						"production-pt": {
-							"fileReplacements": [
-								{
-									"replace": "src/environments/environment.ts",
-									"with": "src/environments/environment.prod.ts"
-								}
-							],
-							"optimization": true,
-							"outputHashing": "all",
-							"sourceMap": false,
-							"extractCss": true,
-							"namedChunks": false,
-							"aot": true,
-							"extractLicenses": true,
-							"vendorChunk": false,
-							"buildOptimizer": true,
-							"baseHref": "/pt/",
-							"outputPath": "dist/jira/pt",
-							"i18nFile": "src/locale/messages.pt.xlf",
-							"i18nFormat": "xlf",
-							"i18nLocale": "pt",
-							"i18nMissingTranslation": "error"
-						}
+              "buildOptimizer": true,
+              "baseHref": "/en/",
+              "outputPath": "dist/jira/en"
+            },
+            "pt": {
+              "aot": true,
+              "baseHref": "/pt/",
+              "outputPath": "dist/jira/pt",
+              "i18nFile": "src/locale/messages.pt.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "pt",
+              "i18nMissingTranslation": "error"
+            },
+            "production-pt": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "baseHref": "/pt/",
+              "outputPath": "dist/jira/pt",
+              "i18nFile": "src/locale/messages.pt.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "pt",
+              "i18nMissingTranslation": "error"
+            }
           }
         },
         "serve": {
@@ -93,10 +96,10 @@
           "configurations": {
             "production": {
               "browserTarget": "jira:build:production"
-						},
-						"pt": {
-							"browserTarget": "jira:build:pt"
-						}
+            },
+            "pt": {
+              "browserTarget": "jira:build:pt"
+            }
           }
         },
         "extract-i18n": {
@@ -113,6 +116,10 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
+              {
+                "input": "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              },
+							"src/_variables.scss",
               "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],

@@ -1,63 +1,78 @@
-<div class="fixed-top w-100 h-100 bg-light d-flex justify-content-around align-items-center">
-
+<div class="d-flex justify-content-around align-items-center w-100 h-100">
 	<div class="fixed-top w-100 h-100 background-image"></div>
 
 	<div class="fixed-top w-100 h-100 overlay"></div>
 
-	<div class="shadow">
+	<form #myLoginForm="ngForm"
+				class="form d-flex flex-column"
+				(ngSubmit)="login(myLoginForm.value)"
+				ngNativeValidate>
 
-		<form #myLoginForm="ngForm"
-			class="form box justify-content-center p-4 bg-white"
-			(ngSubmit)="login(myLoginForm.value)"
-			ngNativeValidate>
+		<mat-card class="card">
 
-			<div class="form-group d-flex flex-column align-items-start">
-				<label for="user" i18n="@@login_server">Server</label>
-				<input [(ngModel)]="loginFormModel.server"
-					class="form-control mr-sm-3"
-					id="server"
-					name="server"
-					placeholder="http://jira.produbanbr.corp"
-					required
-					type="text">
+			<mat-card-header>
+				<mat-card-title><h2>Login</h2></mat-card-title>
+			</mat-card-header>
+
+			<mat-card-content class="d-flex flex-column">
+
+				<mat-form-field [hideRequiredMarker]="true">
+					<mat-label i18n="@@login_server">Server</mat-label>
+					<input matInput
+								 [(ngModel)]="loginFormModel.server"
+								 id="server"
+								 name="server"
+								 i18n-placeholder="@@login_server"
+								 placeholder="Server placeholder"
+								 required
+								 type="text">
+				</mat-form-field>
+
+				<mat-form-field [hideRequiredMarker]="true">
+					<input matInput
+								 type="text"
+								 placeholder="Username"
+								 id="user"
+								 i18n-placeholder="@@login_username"
+								 [(ngModel)]="loginFormModel.user"
+								 name="user"
+								 required>
+				</mat-form-field>
+
+				<mat-form-field [hideRequiredMarker]="true">
+					<input matInput
+								 type="password"
+								 id="password"
+								 i18n-placeholder="@@login_password"
+								 [(ngModel)]="loginFormModel.password"
+								 name="password"
+								 placeholder="Password"
+								 required>
+				</mat-form-field>
+
+				<mat-checkbox type="checkbox"
+											id="savePassword"
+											[(ngModel)]="loginFormModel.savePassword"
+											name="savePassword"
+											i18n="@@login_save_password">
+					Save password
+				</mat-checkbox>
+
+				<app-error *ngIf="!!error" [error]="error"></app-error>
+
+			</mat-card-content>
+
+			<div class="d-flex flex-column">
+				<small>
+					<a (click)="clearDisclaimerAgreement()" i18n="@@login_see_usage_terms" routerLink="/disclaimer">
+						See usage terms
+					</a>
+				</small>
+
+				<button mat-raised-button color="primary" type="submit">Login</button>
 			</div>
 
-			<div class="form-group d-flex flex-column align-items-start">
-				<label for="user" i18n="@@login_username">Username</label>
-				<input type="text"
-							 placeholder="Username (xb207090)"
-							 id="user"
-					[(ngModel)]="loginFormModel.user"
-							 name="user"
-							 class="form-control mr-sm-3"
-							 required>
-			</div>
+		</mat-card>
 
-			<div class="form-group d-flex flex-column align-items-start">
-				<label for="password" i18n="@@login_password">Password</label>
-				<input type="password"
-							 id="password"
-					[(ngModel)]="loginFormModel.password"
-							 name="password"
-							 class="form-control mr-sm-3"
-							 required>
-			</div>
-
-			<div class="group">
-				<input type="checkbox"
-							 id="savePassword"
-					[(ngModel)]="loginFormModel.savePassword"
-							 name="savePassword"
-							 class="mr-2"><label for="savePassword" i18n="@@login_save_password">Save password</label>
-			</div>
-
-			<app-error *ngIf="!!error" [error]="error"></app-error>
-
-			<small><a (click)="clearDisclaimerAgreement()" i18n="@@login_see_usage_terms" routerLink="/disclaimer">See usage
-				terms</a></small>
-			<button type="submit" class="btn btn-primary btn-block">Login</button>
-
-		</form>
-
-	</div>
+	</form>
 </div>

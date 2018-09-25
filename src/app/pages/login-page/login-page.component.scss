@@ -6,11 +6,15 @@
 .background-image {
 	z-index: 0;
 	//noinspection CssUnknownTarget
-	background-image: url("/assets/login-background.jpeg");
+	background-image: url('/assets/login-background.jpeg');
 	background-size: cover;
 }
 
 .form {
+	background-color: white;
 	position: relative;
-	max-width: 300px;
+}
+
+.card > * {
+	width: 100%;
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { SessionService } from '../../services';
 import { Router } from '@angular/router';
-import { BrowserService, IBrowser } from '../../services/browser.service';
+import { SessionService } from '../../services';
+import { BrowserService, IBrowser } from '../../services';
 
 @Component({
 	selector: 'app-disclaimer',

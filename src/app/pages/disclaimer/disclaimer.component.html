@@ -1,10 +1,17 @@
-<div class="fixed-top w-100 h-100 bg-light d-flex justify-content-around align-items-center">
+<div class="disclaimer d-flex align-items-center justify-content-around">
 
-	<div class="box bg-white p-4 shadow">
+	<mat-card style="max-width: 80%;">
 
-		<h1 i18n="@@disclaimer_header_important">Important</h1>
+		<mat-card-header class="d-flex align-items-center">
+			<h1 class="d-flex align-items-center">
+				<mat-icon [inline]="true" style="margin-right: 1rem;">info</mat-icon>
+			</h1>
+			<h2>
+				<span i18n="@@disclaimer_header_important">Important</span>
+			</h2>
+		</mat-card-header>
 
-		<main>
+		<mat-card-content>
 			<ul>
 
 				<li>
@@ -41,15 +48,21 @@
 
 			</ul>
 
-			<span *ngIf="currentBrowser.extensionUrl" i18n="@@disclaimer_default_configuration">(1) the extension, on its default configurations, opens some security holes in your computer</span>
-		</main>
+			<span *ngIf="currentBrowser.extensionUrl" i18n="@@disclaimer_default_configuration">
+				(1) the extension, on its default configurations, opens some security holes in your computer
+			</span>
+		</mat-card-content>
 
-		<div class="mt-4 d-flex justify-content-center">
-			<button (click)="onAgreeButtonClick()" class="btn btn-primary" i18n="@@disclaimer_button_agreement">
+		<mat-card-actions class="d-flex justify-content-around mx-auto">
+			<button mat-raised-button
+							color="primary"
+							(click)="onAgreeButtonClick()"
+							class="btn btn-primary"
+							i18n="@@disclaimer_button_agreement">
 				I have read and I agree with the above information
 			</button>
-		</div>
+		</mat-card-actions>
 
-	</div>
+	</mat-card>
 
 </div>
