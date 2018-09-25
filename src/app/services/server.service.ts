@@ -41,7 +41,6 @@ export class ServerService {
 					'progress',
 					'worklog',
 				],
-				// fields: '*all',
 			}
 		});
 	}
@@ -53,7 +52,6 @@ export class ServerService {
 				'Authorization': 'Basic ' + token,
 			}),
 			params: {
-				// tslint:disable-next-line:max-line-length
 				jql: `project = SSAZBR AND ` +
 					`(created > ${moment(initialDate).format('YYYY-MM-DD')} AND created < ${moment(finalDate).format('YYYY-MM-DD')})`,
 				startAt: '0',
