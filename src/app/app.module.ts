@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
@@ -54,6 +55,7 @@ registerLocaleData(localePt);
 		MatFormFieldModule,
 		MatInputModule,
 		MatCheckboxModule,
+		MatToolbarModule,
 	],
 	providers: [
 		{provide: LOCALE_ID, useValue: 'pt-BR'}

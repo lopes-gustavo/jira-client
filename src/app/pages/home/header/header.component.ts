@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Jira } from '../../../models';
 import { SessionService } from '../../../services';
-import { Nullable } from '../../../types';
 
 @Component({
 	selector: 'app-header',
@@ -11,10 +10,14 @@ import { Nullable } from '../../../types';
 })
 export class HeaderComponent {
 
-	public currentUser: Nullable<Jira.Author>;
+	public currentUser: Jira.Author;
 
 	constructor(private sessionService: SessionService, private router: Router) {
-		this.currentUser = this.sessionService.currentUser;
+		if (this.sessionService.currentUser) {
+			this.currentUser = this.sessionService.currentUser;
+		} else {
+			this.logout();
+		}
 	}
 
 	public logout() {
