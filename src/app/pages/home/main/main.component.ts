@@ -1,33 +1,47 @@
 import * as moment from 'moment';
 import { forkJoin } from 'rxjs';
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Jira } from '../../../models';
 import { ServerService, SessionService } from '../../../services';
+import { MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
 	selector: 'app-main',
 	templateUrl: './main.component.html',
 	styleUrls: ['./main.component.scss']
 })
-export class MainComponent {
+export class MainComponent implements OnInit {
+	private serverUrl: string;
+
 	sortParams = {
 		isDesc: false,
 		column: 'timeSpentHours',
 		direction: 1,
 	};
-	displayOverlay = true;
-
-	jiraData = new JiraData();
-
 	searchFormModel = {
 		initialDate: moment().add(-2, `weeks`).format(`YYYY-MM-DD`),
 		finalDate: moment().format(`YYYY-MM-DD`),
 	};
-
+	displayOverlay = true;
+	jiraData = new JiraData();
 	currentUser: Jira.Author;
-
 	dateRange: moment.Moment[] = [];
-	private serverUrl: string;
+
+	tableDataHoursPerTaskPerDay: { displayedColumns: string[], dataSource: MatTableDataSource<Worklog> } = {
+		displayedColumns: ['key', 'status', 'summary', 'created', 'timeSpentHours'],
+		dataSource: new MatTableDataSource([]),
+	};
+	tableDataHoursPerDay: { displayedColumns: string[], dataSource: MatTableDataSource<{date: string, hours: number}> } = {
+		displayedColumns: ['date', 'hours'],
+		dataSource: new MatTableDataSource([]),
+	};
+	tableDataTeamHoursPerDay: { displayedColumns: string[], dataSource: string[][] } = {
+		displayedColumns: [],
+		dataSource: [],
+	};
+
+	@ViewChild('tableDataHoursPerTaskPerDaySort') tableDataHoursPerTaskPerDaySort: MatSort;
+	@ViewChild('tableDataHoursPerDaySort') tableDataHoursPerDaySort: MatSort;
 
 	constructor(private serverService: ServerService, private sessionService: SessionService) {
 		const currentUser = this.sessionService.currentUser;
@@ -38,6 +52,11 @@ export class MainComponent {
 		}
 
 		this.serverUrl = sessionService.getServerUrl();
+	}
+
+	ngOnInit() {
+		this.tableDataHoursPerTaskPerDay.dataSource.sort = this.tableDataHoursPerTaskPerDaySort;
+		this.tableDataHoursPerDay.dataSource.sort = this.tableDataHoursPerDaySort;
 	}
 
 	sortColumnBy(property: string) {
@@ -107,8 +126,8 @@ export class MainComponent {
 		return true;
 	}
 
-	getWorklogHoursOnDay(worklogHours: { key: string, value: any }, day: string) {
-		return worklogHours.value[moment(day).format('YYYY-MM-DD')] || 0;
+	getWorklogHoursOnDay(worklogHours: { key: string, value: any }, day: moment.Moment) {
+		return worklogHours.value[day.format('YYYY-MM-DD')] || 0;
 	}
 
 	isWeekend(date: string) {
@@ -164,6 +183,10 @@ export class MainComponent {
 
 		});
 
+		this.tableDataHoursPerTaskPerDay.dataSource.data = this.jiraData.currentUserIssues;
+		this.tableDataHoursPerDay.dataSource.data = this.keys(this.jiraData.currentUserWorklogByDay)
+			.reduce((acc, cur) => [...acc, {date: cur.key, hours: cur.value}], []);
+
 		this.sortJiraIssuesByWorklog();
 
 	}
@@ -174,6 +197,7 @@ export class MainComponent {
 				`Por favor, diminua o intervalo da busca ou requisite ao desenvolvedor que implemente busca com paginação.`);
 		}
 
+		this.tableDataTeamHoursPerDay.dataSource = [];
 		jiraData.issues.forEach(issue => {
 			if (!issue.fields.worklog.worklogs.length) {
 				issue.fields.worklog.worklogs.push(new Jira.Issue.Worklogs());
@@ -188,6 +212,20 @@ export class MainComponent {
 			this.sortJiraIssuesByWorklog();
 
 		});
+
+		this.tableDataTeamHoursPerDay.displayedColumns = [' ', ...this.dateRange.map(date => moment(date).format('DD MMM'))];
+
+		for (let worklogHours of this.keys(this.jiraData.teamWorklogByDay)) {
+			// const index = this.tableDataTeamHoursPerDay.dataSource.push([worklogHours.key]);
+			const index = this.tableDataTeamHoursPerDay.dataSource.push([worklogHours.key]);
+			// this.tableDataTeamHoursPerDay.dataSource[index - 1].push();
+
+			for (let day of this.dateRange) {
+				const hours = this.getWorklogHoursOnDay(worklogHours, day);
+				this.tableDataTeamHoursPerDay.dataSource[index - 1].push(`${hours}`);
+			}
+		}
+
 	}
 
 	private createJiraWorklogByDaysObject(issue: Jira.Issue, worklog: Jira.Issue.IWorklogs) {

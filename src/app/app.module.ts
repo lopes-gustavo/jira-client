@@ -10,6 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
@@ -56,6 +58,8 @@ registerLocaleData(localePt);
 		MatInputModule,
 		MatCheckboxModule,
 		MatToolbarModule,
+		MatTableModule,
+		MatSortModule,
 	],
 	providers: [
 		{provide: LOCALE_ID, useValue: 'pt-BR'}

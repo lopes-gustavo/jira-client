@@ -1,152 +1,108 @@
+<!--suppress JSUnusedLocalSymbols, UnnecessaryLabelJS -->
+
 <div class="overlay" *ngIf="displayOverlay"></div>
 
-<div class="searchRow shadow">
-
-	<form class="form-inline justify-content-center p-3"
+<mat-toolbar color="primary" class="searchRow justify-content-around mat-elevation-z3">
+	<form class="d-flex align-items-center"
 				#myForm="ngForm"
 				(ngSubmit)="generateReports(myForm.value)"
 				ngNativeValidate>
 
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text" i18n="@@home_main_initial_date">Initial date</span>
-			</div>
-			<input type="date"
-						 id="initial-date"
-						 title="initial-date"
-						 [(ngModel)]="searchFormModel.initialDate"
-						 name="initialDate"
-						 class="form-control mr-sm-3">
+		<div class="d-flex">
+			<span class="mr-1 d-flex align-items-center" i18n="@@home_main_initial_date">Initial date</span>
+			<mat-form-field>
+				<input type="date"
+							 matInput
+							 id="initial-date"
+							 title="initial-date"
+							 [(ngModel)]="searchFormModel.initialDate"
+							 name="initialDate">
+			</mat-form-field>
 		</div>
 
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text" i18n="@@home_main_last_date">Last date</span>
-			</div>
-			<input type="date"
-						 id="final-date"
-						 title="final-date"
-						 [(ngModel)]="searchFormModel.finalDate"
-						 name="finalDate"
-						 class="form-control mr-sm-3">
+		<div class="d-flex">
+			<span class="mr-1 d-flex align-items-center" i18n="@@home_main_last_date">Last date</span>
+			<mat-form-field>
+				<input type="date"
+							 matInput
+							 id="final-date"
+							 title="final-date"
+							 [(ngModel)]="searchFormModel.finalDate"
+							 name="finalDate">
+			</mat-form-field>
 		</div>
 
-		<button type="submit" class="btn btn-primary" i18n="@@home_main_generate_reports">Generate reports</button>
+		<button mat-stroked-button type="submit" i18n="@@home_main_generate_reports" class="ml-1">Generate reports</button>
 
 	</form>
+</mat-toolbar>
 
+<!-- Horas lançadas por tarefa por dia -->
+<div class="m-5 mat-elevation-z8">
+	<table mat-table
+				 matSort
+				 #tableDataHoursPerTaskPerDaySort="matSort"
+				 [dataSource]="tableDataHoursPerTaskPerDay.dataSource"
+				 class="w-100">
+		<ng-container matColumnDef="key">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Key</th>
+			<td mat-cell *matCellDef="let element"> {{ element.key }}</td>
+		</ng-container>
+		<ng-container matColumnDef="status">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+			<td mat-cell *matCellDef="let element"> {{ element.status }}</td>
+		</ng-container>
+		<ng-container matColumnDef="summary">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Summary</th>
+			<td mat-cell *matCellDef="let element"> {{ element.summary }}</td>
+		</ng-container>
+		<ng-container matColumnDef="created">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Created</th>
+			<td mat-cell *matCellDef="let element"> {{ element.created }}</td>
+		</ng-container>
+		<ng-container matColumnDef="timeSpentHours">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Time spent</th>
+			<td mat-cell *matCellDef="let element"> {{ element.timeSpentHours }}</td>
+		</ng-container>
+
+		<tr mat-header-row *matHeaderRowDef="tableDataHoursPerTaskPerDay.displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: tableDataHoursPerTaskPerDay.displayedColumns;"></tr>
+	</table>
 </div>
 
-<div class="container mt-5">
+<!-- Horas lançadas por dia -->
+<div class="m-5 mat-elevation-z8">
+	<table mat-table
+				 matSort
+				 #tableDataHoursPerDaySort="matSort"
+				 [dataSource]="tableDataHoursPerDay.dataSource"
+				 class="w-100">
+		<ng-container matColumnDef="date">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Date</th>
+			<td mat-cell *matCellDef="let element"> {{ element.date }}</td>
+		</ng-container>
+		<ng-container matColumnDef="hours">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Hours</th>
+			<td mat-cell *matCellDef="let element"> {{ element.hours }}</td>
+		</ng-container>
 
-	<main>
+		<tr mat-header-row *matHeaderRowDef="tableDataHoursPerDay.displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: tableDataHoursPerDay.displayedColumns;"></tr>
+	</table>
+</div>
 
-		<!-- Horas lançadas por tarefa por dia -->
-		<app-table title="Horas lançadas por tarefa por dia" [condition]="jiraData.currentUserIssues.length">
-			<table class="table table-hover">
+<!-- Horas lançadas do time -->
+<div class="m-5 overflow-x-auto mat-elevation-z8">
+	<table mat-table
+				 matSort
+				 [dataSource]="tableDataTeamHoursPerDay.dataSource"
+				 class="w-100">
+		<ng-container [matColumnDef]="column" *ngFor="let column of tableDataTeamHoursPerDay.displayedColumns; let i = index">
+			<th mat-header-cell *matHeaderCellDef [ngClass]="{sticky: i===0}"> {{ column }} </th>
+			<td mat-cell *matCellDef="let element" [ngClass]="{sticky: i===0}"> {{ element[i] }} </td>
+		</ng-container>
 
-				<thead>
-				<tr>
-					<th scope="col">
-								<span class="pointer" (click)="sortColumnBy('key')">
-									ID <i [class]="getFaIconClassFor('key')" aria-hidden="true"></i>
-								</span>
-					</th>
-					<th scope="col">
-								<span class="pointer" (click)="sortColumnBy('status')">
-									Status <i [class]="getFaIconClassFor('status')" aria-hidden="true"></i>
-								</span>
-					</th>
-					<th scope="col">
-								<span class="pointer" (click)="sortColumnBy('summary')">
-									Task <i [class]="getFaIconClassFor('summary')" aria-hidden="true"></i>
-								</span>
-					</th>
-					<!--<th scope="col">Description</th>-->
-					<th scope="col">
-								<span class="pointer" (click)="sortColumnBy('created')">
-									Worklog Date <i [class]="getFaIconClassFor('created')" aria-hidden="true"></i>
-								</span>
-					</th>
-					<th scope="col">
-								<span class="pointer" (click)="sortColumnBy('timeSpentHours')">
-									Worklog Hours <i [class]="getFaIconClassFor('timeSpentHours')" aria-hidden="true"></i>
-								</span>
-					</th>
-				</tr>
-				</thead>
-
-				<tbody>
-				<tr *ngFor="let issue of jiraData.currentUserIssues">
-					<th scope="row">{{ issue.key }}</th>
-					<td contenteditable>{{ issue.status }}</td>
-					<td contenteditable>{{ issue.summary }}</td>
-					<!--<td contenteditable>{{ issue.fields?.description }}</td>-->
-					<td contenteditable>{{ issue.created }}</td>
-					<td contenteditable>{{ issue.timeSpentHours }}</td>
-				</tr>
-				</tbody>
-
-			</table>
-		</app-table>
-
-		<!-- Horas lançadas por dia -->
-		<app-table title="Horas lançadas por dia" [condition]="keys(jiraData.currentUserWorklogByDay).length">
-			<table class="table table-bordered table-striped text-center">
-
-				<thead>
-				<tr>
-					<th scope="col">Date</th>
-					<th scope="col">Hours</th>
-				</tr>
-				</thead>
-
-				<tbody>
-				<tr *ngFor="let worklogHours of keys(jiraData.currentUserWorklogByDay)">
-					<th scope="row">{{ worklogHours.key }}</th>
-					<td>{{ worklogHours.value }}</td>
-				</tr>
-				</tbody>
-
-			</table>
-		</app-table>
-
-		<!-- Horas lançadas do time -->
-		<app-table title="Horas lançadas do time" [condition]="keys(jiraData.teamWorklogByDay).length">
-			<div class="overflow-x-auto">
-				<table class="table table-sm table-bordered table-hover text-center">
-
-					<thead>
-					<tr>
-						<th scope="col" class="sticky"></th>
-						<th scope="col"
-								[ngClass]="{'bg-secondary': isWeekend(day)}"
-								*ngFor="let day of dateRange"
-						>{{ day | date: "dd MMM": '': 'pt-br'}}
-						</th>
-					</tr>
-					</thead>
-
-					<tbody>
-					<tr *ngFor="let worklogHours of keys(jiraData.teamWorklogByDay)">
-						<th scope="row" class="sticky">
-							<div class="internal-sticky-th">
-								{{ worklogHours.key | capitalizeFirst }}
-							</div>
-						</th>
-
-						<td class="align-middle"
-								[ngClass]="{'bg-secondary': isWeekend(day)}"
-								*ngFor="let day of dateRange"
-						>{{ getWorklogHoursOnDay(worklogHours, day) }}
-						</td>
-					</tr>
-					</tbody>
-
-				</table>
-			</div>
-		</app-table>
-
-	</main>
-
+		<tr mat-header-row *matHeaderRowDef="tableDataTeamHoursPerDay.displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: tableDataTeamHoursPerDay.displayedColumns;"></tr>
+	</table>
 </div>

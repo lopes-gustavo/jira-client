@@ -2,10 +2,9 @@
 	top: 0;
 	position: sticky;
 	z-index: 10;
-	background-color: #eeeeee;
 }
 
-th.sticky {
+.sticky {
 	left: -1px;
 	position: sticky;
 	background-color: white;
@@ -28,4 +27,13 @@ th.sticky {
 	background-color: rgba(0, 0, 0, 0.85);
 	position: fixed;
 	z-index: 10;
+}
+
+
+td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+	padding: 8px;
+}
+
+th.mat-sort-header-sorted {
+	color: black;
 }
