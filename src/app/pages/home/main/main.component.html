@@ -71,7 +71,7 @@
 </div>
 
 <!-- Horas lançadas por dia -->
-<div class="m-5 mat-elevation-z8">
+<div class="m-5 mat-elevation-z8" id="tableDataHoursPerDayContainer">
 	<table mat-table
 				 matSort
 				 #tableDataHoursPerDaySort="matSort"
@@ -87,7 +87,7 @@
 		</ng-container>
 
 		<tr mat-header-row *matHeaderRowDef="tableDataHoursPerDay.displayedColumns"></tr>
-		<tr mat-row *matRowDef="let row; columns: tableDataHoursPerDay.displayedColumns;"></tr>
+		<tr mat-row *matRowDef="let row; let even = even; columns: tableDataHoursPerDay.displayedColumns;" [ngClass]="{gray: even}"></tr>
 	</table>
 </div>
 
@@ -96,13 +96,14 @@
 	<table mat-table
 				 matSort
 				 [dataSource]="tableDataTeamHoursPerDay.dataSource"
-				 class="w-100">
-		<ng-container [matColumnDef]="column" *ngFor="let column of tableDataTeamHoursPerDay.displayedColumns; let i = index">
-			<th mat-header-cell *matHeaderCellDef [ngClass]="{sticky: i===0}"> {{ column }} </th>
-			<td mat-cell *matCellDef="let element" [ngClass]="{sticky: i===0}"> {{ element[i] }} </td>
+				 class="w-100 center-text">
+		<ng-container [matColumnDef]="column" *ngFor="let column of tableDataTeamHoursPerDay.displayedColumns; let i = index" [sticky]="i===0">
+			<th mat-header-cell *matHeaderCellDef [ngClass]="{'dark-gray': isWeekend(column)}"> {{ column }} </th>
+			<td mat-cell *matCellDef="let element" [ngClass]="{'dark-gray': isWeekend(column)}"> {{ element[i] }} </td>
 		</ng-container>
 
 		<tr mat-header-row *matHeaderRowDef="tableDataTeamHoursPerDay.displayedColumns"></tr>
-		<tr mat-row *matRowDef="let row; columns: tableDataTeamHoursPerDay.displayedColumns;"></tr>
+		<tr mat-row *matRowDef="let row; let even = even; columns: tableDataTeamHoursPerDay.displayedColumns;" [ngClass]="{gray: even}"></tr>
 	</table>
 </div>
+

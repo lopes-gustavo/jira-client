@@ -131,7 +131,7 @@ export class MainComponent implements OnInit {
 	}
 
 	isWeekend(date: string) {
-		return [6, 7].includes(moment(date).isoWeekday());
+		return [6, 7].includes(moment(date, 'DD MMM').isoWeekday());
 	}
 
 	private clearData() {

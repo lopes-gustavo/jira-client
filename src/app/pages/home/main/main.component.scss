@@ -4,19 +4,6 @@
 	z-index: 10;
 }
 
-.sticky {
-	left: -1px;
-	position: sticky;
-	background-color: white;
-	z-index: 9;
-	padding: 0;
-
-	.internal-sticky-th {
-		border-right: 1px solid #dee2e6;
-		padding: 0.3rem;
-	}
-}
-
 .overflow-x-auto {
 	overflow-x: auto;
 }
@@ -36,4 +23,28 @@ td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
 
 th.mat-sort-header-sorted {
 	color: black;
+}
+
+tr.mat-row:hover {
+	//background-color: #d3d3d3 !important;
+}
+
+.gray {
+	background-color: #f5f5f5;
+}
+
+.dark-gray {
+	background-color: #d3d3d3;
+}
+
+.center-text {
+	text-align: center;
+
+	th.mat-header-cell {
+		text-align: center;
+	}
+}
+
+#tableDataHoursPerDayContainer {
+	width: 35%;
 }
