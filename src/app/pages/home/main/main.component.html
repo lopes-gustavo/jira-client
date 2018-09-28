@@ -93,13 +93,21 @@
 
 <!-- Horas lançadas do time -->
 <div class="m-5 overflow-x-auto mat-elevation-z8">
+	<div class="pad-8">
+		<mat-checkbox #colouredTable i18n="@@home_main_coloured_table">Coloured table</mat-checkbox>
+	</div>
+
 	<table mat-table
 				 matSort
 				 [dataSource]="tableDataTeamHoursPerDay.dataSource"
 				 class="w-100 center-text">
 		<ng-container [matColumnDef]="column" *ngFor="let column of tableDataTeamHoursPerDay.displayedColumns; let i = index" [sticky]="i===0">
 			<th mat-header-cell *matHeaderCellDef [ngClass]="{'dark-gray': isWeekend(column)}"> {{ column }} </th>
-			<td mat-cell *matCellDef="let element" [ngClass]="{'dark-gray': isWeekend(column)}"> {{ element[i] }} </td>
+			<td mat-cell
+					*matCellDef="let element"
+					[ngClass]="{'dark-gray': isWeekend(column)}"
+					[ngStyle]="{backgroundColor: (colouredTable.checked ? getBackgroundColor(element[i], isWeekend(column)) : '')}"
+			> {{ element[i] }} </td>
 		</ng-container>
 
 		<tr mat-header-row *matHeaderRowDef="tableDataTeamHoursPerDay.displayedColumns"></tr>

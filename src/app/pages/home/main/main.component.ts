@@ -471,6 +471,20 @@ export class MainComponent implements OnInit {
 	 }
 	 */
 
+	getBackgroundColor(hoursAsString: string, isWeekend: boolean) {
+		const hours = Number(hoursAsString);
+
+		if (!isWeekend) {
+			if (hours === 8) { return 'green'; }
+			else if (hours < 8) { return 'lightcoral'; }
+			else { return 'yellow'; }
+		} else {
+			if (hours === 0) { return ''; }
+			else { return 'yellow'; }
+		}
+
+	}
+
 }
 
 interface Worklog {

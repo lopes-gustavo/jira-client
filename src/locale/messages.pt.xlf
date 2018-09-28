@@ -88,7 +88,10 @@
 				<source>Generate reports</source>
 				<target>Gerar relatórios</target>
 			</trans-unit>
-
+			<trans-unit id="home_main_coloured_table" datatype="html">
+				<source>Coloured table</source>
+				<target>Colorir tabela</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -16,9 +16,8 @@
 	z-index: 10;
 }
 
-
 td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
-	padding: 8px;
+	padding: 0 8px;
 }
 
 th.mat-sort-header-sorted {
@@ -27,6 +26,10 @@ th.mat-sort-header-sorted {
 
 tr.mat-row:hover {
 	//background-color: #d3d3d3 !important;
+}
+
+.pad-8 {
+	padding: 8px;
 }
 
 .gray {
