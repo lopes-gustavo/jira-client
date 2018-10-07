@@ -50,36 +50,7 @@ export class LoginPageComponent {
 			(error) => this.error = error,
 		);
 
-		// this._getLogin((user: Jira.Author) => {
-		// 	const currentUser = {...user, token};
-		//
-		// 	this.loginFormModel = {
-		// 		user: '',
-		// 		password: '',
-		// 		savePassword: false,
-		// 	};
-		//
-		// 	this.sessionService.setCurrentUser(currentUser, form.savePassword);
-		// });
-
 	}
-
-	// TODO: Remover esse método
-	/*
-	 private _getLogin(f: (user: Jira.Author) => void): void {
-	 f(new class implements Jira.Author {
-	 avatarUrls: Jira.AvatarUrls;
-	 self: string;
-	 timeZone: string;
-	 active: boolean = true;
-	 displayName: string = 'mDisplayName';
-	 emailAddress: string = 'mEmailAddress';
-	 key: string = 'mKey';
-	 name: string = 'mName';
-	 token: string = 'mToken';
-	 });
-	 }
-	 */
 
 	clearDisclaimerAgreement() {
 		this.sessionService.clearDisclaimerAgreement();
