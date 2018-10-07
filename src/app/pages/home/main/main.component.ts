@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Jira } from '../../../models';
 import { ServerService, SessionService } from '../../../services';
 import { MatSort, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-main',
@@ -43,15 +44,20 @@ export class MainComponent implements OnInit {
 	@ViewChild('tableDataHoursPerTaskPerDaySort') tableDataHoursPerTaskPerDaySort: MatSort;
 	@ViewChild('tableDataHoursPerDaySort') tableDataHoursPerDaySort: MatSort;
 
-	constructor(private serverService: ServerService, private sessionService: SessionService) {
+	constructor(router: Router, private serverService: ServerService, private sessionService: SessionService) {
 		const currentUser = this.sessionService.currentUser;
 		if (currentUser) {
 			this.currentUser = currentUser;
 		} else {
-			throw new Error();
+			router.navigate(['/logout']);
 		}
 
-		this.serverUrl = sessionService.getServerUrl();
+		const serverUrl = sessionService.getServerUrl();
+		if (serverUrl) {
+			this.serverUrl = serverUrl;
+		} else {
+			router.navigate(['/logout']);
+		}
 	}
 
 	ngOnInit() {
@@ -215,12 +221,12 @@ export class MainComponent implements OnInit {
 
 		this.tableDataTeamHoursPerDay.displayedColumns = [' ', ...this.dateRange.map(date => moment(date).format('DD MMM'))];
 
-		for (let worklogHours of this.keys(this.jiraData.teamWorklogByDay)) {
+		for (const worklogHours of this.keys(this.jiraData.teamWorklogByDay)) {
 			// const index = this.tableDataTeamHoursPerDay.dataSource.push([worklogHours.key]);
 			const index = this.tableDataTeamHoursPerDay.dataSource.push([worklogHours.key]);
 			// this.tableDataTeamHoursPerDay.dataSource[index - 1].push();
 
-			for (let day of this.dateRange) {
+			for (const day of this.dateRange) {
 				const hours = this.getWorklogHoursOnDay(worklogHours, day);
 				this.tableDataTeamHoursPerDay.dataSource[index - 1].push(`${hours}`);
 			}
@@ -263,213 +269,6 @@ export class MainComponent implements OnInit {
 		}
 
 	}
-
-	// TODO: Remover esse método
-	/*
-	 private _getJiraData(updateJiraData: (jiraData: Jira.SearchResponse) => void) {
-	 updateJiraData(new class implements Jira.SearchResponse {
-	 expand = '';
-	 issues = [
-	 new class implements Jira.Issue {
-	 expand: string = '';
-	 fields = {
-	 summary: '',
-	 description: '',
-	 created: new Date(),
-	 issuetype: new class implements Jira.Issue.IssueType {
-	 avatarId: number = 1;
-	 description: string = 'mDescription';
-	 iconUrl: string = '';
-	 id: string = 'mId';
-	 name: string = 'mName';
-	 self: string = '';
-	 subtask: boolean = true;
-	 },
-	 worklog: new class implements Jira.Issue.Worklog {
-	 maxResults: number = 10;
-	 startAt: number = 0;
-	 total: number = 5;
-	 worklogs: Jira.Issue.Worklogs[] = [
-	 new class implements Jira.Issue.IWorklogs {
-	 author = new class implements Jira.Author {
-	 avatarUrls: Jira.AvatarUrls;
-	 self: string;
-	 timeZone: string;
-	 active: boolean = true;
-	 displayName: string = 'mDisplayName';
-	 emailAddress: string = 'mEmailAddress';
-	 key: string = 'mKey';
-	 name: string = 'mName';
-	 token: string = 'mToken';
-	 };
-	 comment: string = 'mComment';
-	 created = new Date();
-	 id: string = 'mId';
-	 issueId: string = 'mIssueId';
-	 self: string = '';
-	 started: Date = new Date();
-	 timeSpent: string = '';
-	 timeSpentHours: number;
-	 timeSpentSeconds: number = 60 * 60 * 8;
-	 updateAuthor = new class implements Jira.Author {
-	 avatarUrls: Jira.AvatarUrls;
-	 self: string;
-	 timeZone: string;
-	 active: boolean = true;
-	 displayName: string = 'mDisplayName';
-	 emailAddress: string = 'mEmailAddress';
-	 key: string = 'mKey';
-	 name: string = 'mName';
-	 token: string = 'mToken';
-	 };
-	 updated = new Date();
-	 },
-	 ];
-	 },
-	 assignee: new class implements Jira.Author {
-	 avatarUrls: Jira.AvatarUrls;
-	 self: string;
-	 timeZone: string;
-	 active: boolean = true;
-	 displayName: string = 'mDisplayName';
-	 emailAddress: string = 'mEmailAddress';
-	 key: string = 'mKey';
-	 name: string = 'mName';
-	 token: string = 'mToken';
-	 },
-	 progress: new class implements Jira.Issue.Progress {
-	 percent: number = 100;
-	 progress: number = 100;
-	 total: number = 100;
-	 },
-	 status: new class implements Jira.Issue.Status {
-	 description: string = 'mDescription';
-	 iconUrl: string = '';
-	 id: string = 'mId';
-	 name: string = 'mName';
-	 self: string = '';
-	 statusCategory = {
-	 self: '',
-	 id: 1,
-	 key: '',
-	 colorName: '',
-	 name: '',
-	 };
-	 }
-	 };
-	 id: string = '';
-	 key: string = '';
-	 self: string = '';
-	 }
-	 ];
-	 maxResults = 10;
-	 startAt = 0;
-	 total = 5;
-	 });
-	 }
-
-	 private _getTeamJiraData(updateTeamJiraData: (jiraData: Jira.SearchResponse) => void) {
-	 updateTeamJiraData(new class implements Jira.SearchResponse {
-	 expand = '';
-	 issues = [
-	 new class implements Jira.Issue {
-	 expand: string = '';
-	 fields = {
-	 summary: '',
-	 description: '',
-	 created: new Date(),
-	 issuetype: new class implements Jira.Issue.IssueType {
-	 avatarId: number = 1;
-	 description: string = 'mDescription';
-	 iconUrl: string = '';
-	 id: string = 'mId';
-	 name: string = 'mName';
-	 self: string = '';
-	 subtask: boolean = true;
-	 },
-	 worklog: new class implements Jira.Issue.Worklog {
-	 maxResults: number = 10;
-	 startAt: number = 0;
-	 total: number = 5;
-	 worklogs: Jira.Issue.Worklogs[] = [
-	 new class implements Jira.Issue.IWorklogs {
-	 author = new class implements Jira.Author {
-	 avatarUrls: Jira.AvatarUrls;
-	 self: string;
-	 timeZone: string;
-	 active: boolean = true;
-	 displayName: string = 'mDisplayName';
-	 emailAddress: string = 'mEmailAddress';
-	 key: string = 'mKey';
-	 name: string = 'mName';
-	 token: string = 'mToken';
-	 };
-	 comment: string = 'mComment';
-	 created = new Date();
-	 id: string = 'mId';
-	 issueId: string = 'mIssueId';
-	 self: string = '';
-	 started: Date = new Date();
-	 timeSpent: string = '';
-	 timeSpentHours: number;
-	 timeSpentSeconds: number = 60 * 60 * 8;
-	 updateAuthor = new class implements Jira.Author {
-	 avatarUrls: Jira.AvatarUrls;
-	 self: string;
-	 timeZone: string;
-	 active: boolean = true;
-	 displayName: string = 'mDisplayName';
-	 emailAddress: string = 'mEmailAddress';
-	 key: string = 'mKey';
-	 name: string = 'mName';
-	 token: string = 'mToken';
-	 };
-	 updated = new Date();
-	 },
-	 ];
-	 },
-	 assignee: new class implements Jira.Author {
-	 avatarUrls: Jira.AvatarUrls;
-	 self: string;
-	 timeZone: string;
-	 active: boolean = true;
-	 displayName: string = 'mDisplayName';
-	 emailAddress: string = 'mEmailAddress';
-	 key: string = 'mKey';
-	 name: string = 'mName';
-	 token: string = 'mToken';
-	 },
-	 progress: new class implements Jira.Issue.Progress {
-	 percent: number = 100;
-	 progress: number = 100;
-	 total: number = 100;
-	 },
-	 status: new class implements Jira.Issue.Status {
-	 description: string = 'mDescription';
-	 iconUrl: string = '';
-	 id: string = 'mId';
-	 name: string = 'mName';
-	 self: string = '';
-	 statusCategory = {
-	 self: '',
-	 id: 1,
-	 key: '',
-	 colorName: '',
-	 name: '',
-	 };
-	 }
-	 };
-	 id: string = '';
-	 key: string = '';
-	 self: string = '';
-	 }
-	 ];
-	 maxResults = 10;
-	 startAt = 0;
-	 total = 5;
-	 });
-	 }
-	 */
 
 	getBackgroundColor(hoursAsString: string, isWeekend: boolean) {
 		const hours = Number(hoursAsString);
