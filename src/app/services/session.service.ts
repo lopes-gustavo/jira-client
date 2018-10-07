@@ -1,70 +1,74 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Jira } from '../models';
 import { Nullable } from '../types';
+
+const STORAGE_SERVER_URL = 'serverUrl';
+const STORAGE_CURRENT_USER = 'currentUser';
+const STORAGE_DISCLAIMER = 'disclaimer';
 
 @Injectable({
 	providedIn: 'root'
 })
-export class SessionService {
+export class SessionService implements OnInit {
 
-	currentUser: Nullable<Jira.Author>;
+	currentUser: Nullable<Jira.Author> = null;
 
-	constructor() {
+	ngOnInit() {
 		// Tenta buscar no local storage ou session storage.
 		// Retorna o valor do local storage se existir, se não o valor do session storage.
 		// Caso ambos sejam nulos, retorna nulo
-		const localStorageCurrentUser = JSON.parse(localStorage.getItem('currentUser') as string);
-		const sessionStorageCurrentUser = JSON.parse(sessionStorage.getItem('currentUser') as string);
+		const localStorageCurrentUser = JSON.parse(localStorage.getItem(STORAGE_CURRENT_USER) as string);
+		const sessionStorageCurrentUser = JSON.parse(sessionStorage.getItem(STORAGE_CURRENT_USER) as string);
 
 		this.currentUser = localStorageCurrentUser || sessionStorageCurrentUser;
 	}
 
 	public setCurrentUser(user: Jira.Author, preserveSession: boolean): void {
 		if (preserveSession) {
-			localStorage.setItem('currentUser', JSON.stringify(user));
-			sessionStorage.removeItem('currentUser');
+			localStorage.setItem(STORAGE_CURRENT_USER, JSON.stringify(user));
+			sessionStorage.removeItem(STORAGE_CURRENT_USER);
 		} else {
-			sessionStorage.setItem('currentUser', JSON.stringify(user));
-			localStorage.removeItem('currentUser');
+			sessionStorage.setItem(STORAGE_CURRENT_USER, JSON.stringify(user));
+			localStorage.removeItem(STORAGE_CURRENT_USER);
 		}
 
 		this.currentUser = user;
 	}
 
 	public clearCurrentUser(): void {
-		localStorage.removeItem('currentUser');
-		sessionStorage.removeItem('currentUser');
+		localStorage.removeItem(STORAGE_CURRENT_USER);
+		sessionStorage.removeItem(STORAGE_CURRENT_USER);
 
 		this.currentUser = null;
 	}
 
 	public isDisclaimerAgreed(): boolean {
-		return sessionStorage.getItem('disclaimer') === 'true';
+		return sessionStorage.getItem(STORAGE_DISCLAIMER) === 'true';
 	}
 
 	public saveDisclaimerAgreement() {
-		sessionStorage.setItem('disclaimer', 'true');
+		sessionStorage.setItem(STORAGE_DISCLAIMER, 'true');
 	}
 
 	public clearDisclaimerAgreement() {
-		sessionStorage.removeItem('disclaimer');
+		sessionStorage.removeItem(STORAGE_DISCLAIMER);
 	}
 
 	public saveServerUrl(serverUrl: string) {
-		sessionStorage.setItem('serverUrl', serverUrl);
+		sessionStorage.setItem(STORAGE_SERVER_URL, serverUrl);
 	}
 
 	public getServerUrl() {
-		const serverUrl = sessionStorage.getItem('serverUrl');
+		const serverUrl = sessionStorage.getItem(STORAGE_SERVER_URL);
 		if (!serverUrl) {
-			throw new Error('serverUrl not defined');
+			return '';
 		}
 
 		return serverUrl;
 	}
 
 	public clearServerUrl() {
-		sessionStorage.removeItem('serverUrl');
+		sessionStorage.removeItem(STORAGE_SERVER_URL);
 	}
 
 }
