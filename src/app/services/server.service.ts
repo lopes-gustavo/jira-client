@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Jira } from '../models';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,7 +11,7 @@ export class ServerService {
 	constructor(private httpClient: HttpClient) { }
 
 	login(token: string, server: string) {
-		return this.httpClient.get(`${server}/rest/api/2/myself`, {
+		return this.httpClient.get<Jira.Author>(`${server}/rest/api/2/myself`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json',
 				'Authorization': 'Basic ' + token,
@@ -19,7 +20,7 @@ export class ServerService {
 	}
 
 	getJiraData(token: string, server: string, name: string, initialDate: string, finalDate: string) {
-		return this.httpClient.get(`${server}/rest/api/2/search`, {
+		return this.httpClient.get<Jira.SearchResponse>(`${server}/rest/api/2/search`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json',
 				'Authorization': `Basic ${token}`,
@@ -46,7 +47,7 @@ export class ServerService {
 	}
 
 	getTeamJiraData(token: string, server: string, initialDate: string, finalDate: string) {
-		return this.httpClient.get(`${server}/rest/api/2/search`, {
+		return this.httpClient.get<Jira.SearchResponse>(`${server}/rest/api/2/search`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json',
 				'Authorization': 'Basic ' + token,
