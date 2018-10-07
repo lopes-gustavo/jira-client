@@ -17,10 +17,18 @@ import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
 import { SessionService } from '../../services';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material';
+
+class SessionServiceMock {
+	currentUser = {displayName: ''};
+
+	// noinspection JSUnusedGlobalSymbols
+	getServerUrl = () => '';
+}
 
 describe('HomeComponent', () => {
 	const router = {navigate: jasmine.createSpy('navigate')};
-	const sessionService = {currentUser: {displayName: ''}};
 
 	let component: HomeComponent;
 	let fixture: ComponentFixture<HomeComponent>;
@@ -37,14 +45,16 @@ describe('HomeComponent', () => {
 			imports: [
 				FormsModule,
 				HttpClientModule,
-				MatToolbarModule,
+				BrowserAnimationsModule,
 				MatFormFieldModule,
-				MatSortModule,
-				MatTableModule,
+				MatInputModule,
 				MatCheckboxModule,
+				MatToolbarModule,
+				MatTableModule,
+				MatSortModule,
 			],
 			providers: [
-				{provide: SessionService, useValue: sessionService},
+				{provide: SessionService, useClass: SessionServiceMock},
 				{provide: Router, useValue: router}
 			]
 		})
