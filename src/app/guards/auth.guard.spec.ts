@@ -3,6 +3,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { AuthGuard } from './auth.guard';
 import { Router } from '@angular/router';
 import { SessionService } from '../services';
+import { author } from '../_helper/mocks/jira';
 
 describe('AuthGuard', () => {
 	const router = {navigate: jasmine.createSpy('navigate')};
@@ -27,7 +28,7 @@ describe('AuthGuard', () => {
 	});
 
 	it('should allow logged users to proceed', inject([SessionService], (sessionService: SessionService) => {
-		sessionService.currentUser = {} as any;
+		sessionService.setCurrentUser(author, false);
 		expect(authGuard.canActivate()).toBe(true);
 	}));
 

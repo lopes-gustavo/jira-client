@@ -11,7 +11,10 @@ const STORAGE_DISCLAIMER = 'disclaimer';
 })
 export class SessionService implements OnInit {
 
-	currentUser: Nullable<Jira.Author> = null;
+	private _currentUser: Nullable<Jira.Author> = null;
+	get currentUser(): Nullable<Jira.Author> {
+		return this._currentUser;
+	}
 
 	ngOnInit() {
 		// Tenta buscar no local storage ou session storage.
@@ -20,7 +23,7 @@ export class SessionService implements OnInit {
 		const localStorageCurrentUser = JSON.parse(localStorage.getItem(STORAGE_CURRENT_USER) as string);
 		const sessionStorageCurrentUser = JSON.parse(sessionStorage.getItem(STORAGE_CURRENT_USER) as string);
 
-		this.currentUser = localStorageCurrentUser || sessionStorageCurrentUser;
+		this._currentUser = localStorageCurrentUser || sessionStorageCurrentUser;
 	}
 
 	public setCurrentUser(user: Jira.Author, preserveSession: boolean): void {
@@ -32,14 +35,14 @@ export class SessionService implements OnInit {
 			localStorage.removeItem(STORAGE_CURRENT_USER);
 		}
 
-		this.currentUser = user;
+		this._currentUser = user;
 	}
 
 	public clearCurrentUser(): void {
 		localStorage.removeItem(STORAGE_CURRENT_USER);
 		sessionStorage.removeItem(STORAGE_CURRENT_USER);
 
-		this.currentUser = null;
+		this._currentUser = null;
 	}
 
 	public isDisclaimerAgreed(): boolean {
