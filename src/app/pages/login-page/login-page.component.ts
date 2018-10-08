@@ -21,7 +21,6 @@ export class LoginPageComponent {
 		private router: Router,
 		browser: BrowserService
 	) {
-
 		// Se já está logado, redireciona para página principal
 		if (this.sessionService.currentUser) {
 			this.router.navigate(['/']);

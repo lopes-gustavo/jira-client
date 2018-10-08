@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Jira } from '../models';
 import { Nullable } from '../types';
 
@@ -9,14 +9,14 @@ const STORAGE_DISCLAIMER = 'disclaimer';
 @Injectable({
 	providedIn: 'root'
 })
-export class SessionService implements OnInit {
+export class SessionService {
 
 	private _currentUser: Nullable<Jira.Author> = null;
 	get currentUser(): Nullable<Jira.Author> {
 		return this._currentUser;
 	}
 
-	ngOnInit() {
+	constructor() {
 		// Tenta buscar no local storage ou session storage.
 		// Retorna o valor do local storage se existir, se não o valor do session storage.
 		// Caso ambos sejam nulos, retorna nulo

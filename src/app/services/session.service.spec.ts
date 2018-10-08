@@ -16,10 +16,6 @@ describe('SessionService', () => {
 
 	it('should gather information from session/local storage at initialization', inject([SessionService], (service: SessionService) => {
 		sessionStorage.setItem('currentUser', JSON.stringify(author));
-		expect(service.currentUser).toBeNull();
-
-		service.ngOnInit();
-
 		expect(service.currentUser).toEqual(author);
 	}));
 });
