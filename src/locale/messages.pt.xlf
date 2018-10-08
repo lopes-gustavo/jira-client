@@ -92,6 +92,10 @@
 				<source>Coloured table</source>
 				<target>Colorir tabela</target>
 			</trans-unit>
+			<trans-unit id="home_main_filter_fewer_than_8hours" datatype="html">
+				<source>Only fewer than 8 hours</source>
+				<target>Apenas logs menores que 8 horas</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

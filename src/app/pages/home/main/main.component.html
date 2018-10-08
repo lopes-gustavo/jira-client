@@ -9,7 +9,7 @@
 				ngNativeValidate>
 
 		<div class="d-flex">
-			<span class="mr-1 d-flex align-items-center" i18n="@@home_main_initial_date">Initial date</span>
+			<label for="initial-date" class="mr-1 d-flex align-items-center" i18n="@@home_main_initial_date">Initial date</label>
 			<mat-form-field>
 				<input type="date"
 							 matInput
@@ -21,7 +21,7 @@
 		</div>
 
 		<div class="d-flex">
-			<span class="mr-1 d-flex align-items-center" i18n="@@home_main_last_date">Last date</span>
+			<label for="final-date" class="mr-1 d-flex align-items-center" i18n="@@home_main_last_date">Last date</label>
 			<mat-form-field>
 				<input type="date"
 							 matInput
@@ -72,6 +72,10 @@
 
 <!-- Horas lançadas por dia -->
 <div class="m-5 mat-elevation-z8" id="tableDataHoursPerDayContainer">
+	<div class="pad-8">
+		<mat-checkbox #filterTable i18n="@@home_main_filter_fewer_than_8hours" (change)="filter(filterTable.checked)">Only fewer than 8 hours</mat-checkbox>
+	</div>
+
 	<table mat-table
 				 matSort
 				 #tableDataHoursPerDaySort="matSort"
