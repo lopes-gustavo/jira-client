@@ -27,7 +27,7 @@ export class ServerService {
 			}),
 			params: {
 				jql: `worklogAuthor = ${name} AND project = SSAZBR AND ` +
-					`(created > ${moment(initialDate).format('YYYY-MM-DD')} AND created < ${moment(finalDate).format('YYYY-MM-DD')})`,
+					`(worklogDate >= ${moment(initialDate).format('YYYY-MM-DD')} AND worklogDate <= ${moment(finalDate).format('YYYY-MM-DD')})`,
 				startAt: '0',
 				maxResults: '1000',
 				fields: [
@@ -54,7 +54,7 @@ export class ServerService {
 			}),
 			params: {
 				jql: `project = SSAZBR AND ` +
-					`(created > ${moment(initialDate).format('YYYY-MM-DD')} AND created < ${moment(finalDate).format('YYYY-MM-DD')})`,
+					`(worklogDate >= ${moment(initialDate).format('YYYY-MM-DD')} AND worklogDate <= ${moment(finalDate).format('YYYY-MM-DD')})`,
 				startAt: '0',
 				maxResults: '1000',
 				fields: [
