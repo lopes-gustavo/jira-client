@@ -1,10 +1,10 @@
 import * as moment from 'moment';
 import { forkJoin } from 'rxjs';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Jira } from '../../../models';
-import { ServerService, SessionService } from '../../../services';
-import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+import { MatSort, MatTableDataSource } from '@angular/material';
+import { ServerService, SessionService } from '../../../services';
+import { Jira } from '../../../models';
 
 @Component({
 	selector: 'app-main',
@@ -19,6 +19,8 @@ export class MainComponent implements OnInit {
 		column: 'timeSpentHours',
 		direction: 1,
 	};
+
+	// TODO: Use NgDatePicker
 	searchFormModel = {
 		initialDate: moment().add(-2, `weeks`).format(`YYYY-MM-DD`),
 		finalDate: moment().format(`YYYY-MM-DD`),
@@ -26,6 +28,8 @@ export class MainComponent implements OnInit {
 	displayOverlay = true;
 	jiraData = new JiraData();
 	currentUser: Jira.Author;
+
+	// TODO: Remove moment and use some lightweight library
 	dateRange: moment.Moment[] = [];
 
 	tableDataHoursPerTaskPerDay: { displayedColumns: string[], dataSource: MatTableDataSource<Worklog> } = {
@@ -95,7 +99,7 @@ export class MainComponent implements OnInit {
 
 	generateReports(form: { initialDate: string; finalDate: string }): boolean {
 
-		// TODO: Criar um component para `alert`
+		// TODO: Create an `alert` component
 		if (!form.initialDate) {
 			alert('Por favor, preencha a data inicial');
 			return false;
