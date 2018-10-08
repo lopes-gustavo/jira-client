@@ -124,7 +124,7 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [],
-            "assets": [
+						"assets": [
               "src/favicon.png",
               "src/assets"
             ]
