@@ -38,6 +38,7 @@ export class MainComponent implements OnInit {
 	@ViewChild('tableDataHoursPerDaySort') tableDataHoursPerDaySort: MatSort;
 	private readonly WORKLOG_WEEKDAY_THRESHOLD = 8;
 	private serverUrl: string;
+	private project: string;
 
 	constructor(router: Router, private serverService: ServerService, private sessionService: SessionService) {
 		const currentUser = this.sessionService.currentUser;
@@ -47,9 +48,16 @@ export class MainComponent implements OnInit {
 			router.navigate(['/logout']);
 		}
 
-		const serverUrl = sessionService.getServerUrl();
+		const serverUrl = sessionService.serverUrl;
 		if (serverUrl) {
 			this.serverUrl = serverUrl;
+		} else {
+			router.navigate(['/logout']);
+		}
+
+		const project = sessionService.project;
+		if (project) {
+			this.project = project;
 		} else {
 			router.navigate(['/logout']);
 		}
@@ -90,8 +98,8 @@ export class MainComponent implements OnInit {
 		if (this.currentUser) {
 
 			forkJoin(
-				this.serverService.getJiraData(this.currentUser.token, this.serverUrl, this.currentUser.name, form.initialDate, form.finalDate),
-				this.serverService.getTeamJiraData(this.currentUser.token, this.serverUrl, form.initialDate, form.finalDate),
+				this.serverService.getJiraData(this.currentUser.token, this.serverUrl, this.project, this.currentUser.name, form),
+				this.serverService.getTeamJiraData(this.currentUser.token, this.serverUrl, this.project, form),
 			).subscribe(([jiraData, jiraTeamData]: [Jira.SearchResponse, Jira.SearchResponse]) => {
 				this.updateJiraData(jiraData);
 				this.updateTeamJiraData(jiraTeamData);
@@ -99,8 +107,6 @@ export class MainComponent implements OnInit {
 				this.displayOverlay = false;
 			});
 
-			// this._getJiraData(this.updateJiraData.bind(this));
-			// this._getTeamJiraData(this.updateTeamJiraData.bind(this));
 		}
 
 		return true;
@@ -135,19 +141,6 @@ export class MainComponent implements OnInit {
 
 	}
 
-	/*
-	 getBackgroundColor(hoursAsString: string, isWeekend: boolean) {
-	 const hours = Number(hoursAsString);
-
-	 const teamWorklogByAssignee = this.jiraData.teamWorklogByDay[assigneeName] || {};
-
-	 // Adiciona o worklog.timeSpentHours no jiraTeamWorklog. Seta o mesmo como 0 caso não exista
-	 teamWorklogByAssignee[issueCreatedDate] = (teamWorklogByAssignee[issueCreatedDate] || 0) + worklog.timeSpentHours;
-
-	 this.jiraData.teamWorklogByDay[assigneeName] = teamWorklogByAssignee;
-	 }
-
-	 */
 	filter(shouldFilter: boolean) {
 		this.tableDataHoursPerDay.dataSource.filter = shouldFilter ? String(this.WORKLOG_WEEKDAY_THRESHOLD) : '';
 	}
@@ -291,6 +284,11 @@ export class MainComponent implements OnInit {
 	}
 }
 
+export interface SearchFormModel {
+	initialDate: string;
+	finalDate: string;
+}
+
 interface Worklog {
 	key: string;
 	status: string;
@@ -298,11 +296,6 @@ interface Worklog {
 	description: string;
 	created: string;
 	timeSpentHours: number;
-}
-
-interface SearchFormModel {
-	initialDate: string;
-	finalDate: string;
 }
 
 class TableData<T> {

@@ -5,6 +5,7 @@ import { Nullable } from '../types';
 const STORAGE_SERVER_URL = 'serverUrl';
 const STORAGE_CURRENT_USER = 'currentUser';
 const STORAGE_DISCLAIMER = 'disclaimer';
+const STORAGE_PROJECT = 'project';
 
 @Injectable({
 	providedIn: 'root'
@@ -26,7 +27,32 @@ export class SessionService {
 		this._currentUser = localStorageCurrentUser || sessionStorageCurrentUser;
 	}
 
+
+	public get currentUser(): Nullable<Jira.Author> {
+		return this._currentUser;
+	}
+
+	public get serverUrl() {
+		const serverUrl = sessionStorage.getItem(STORAGE_SERVER_URL);
+		if (!serverUrl) {
+			return '';
+		}
+
+		return serverUrl;
+	}
+
+	public get project() {
+		const project = sessionStorage.getItem(STORAGE_PROJECT);
+		if (!project) {
+			return '';
+		}
+
+		return project;
+	}
+
 	public setCurrentUser(user: Jira.Author, preserveSession: boolean): void {
+		this.sessionPreserved = preserveSession;
+
 		if (preserveSession) {
 			localStorage.setItem(STORAGE_CURRENT_USER, JSON.stringify(user));
 			sessionStorage.removeItem(STORAGE_CURRENT_USER);
@@ -61,17 +87,11 @@ export class SessionService {
 		sessionStorage.setItem(STORAGE_SERVER_URL, serverUrl);
 	}
 
-	public getServerUrl() {
-		const serverUrl = sessionStorage.getItem(STORAGE_SERVER_URL);
-		if (!serverUrl) {
-			return '';
-		}
-
-		return serverUrl;
-	}
-
 	public clearServerUrl() {
 		sessionStorage.removeItem(STORAGE_SERVER_URL);
 	}
 
+	public saveProjectName(projectName: string) {
+		sessionStorage.setItem(STORAGE_PROJECT, projectName);
+	}
 }

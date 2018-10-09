@@ -50,6 +50,10 @@
 				<source>Server</source>
 				<target>Servidor</target>
 			</trans-unit>
+			<trans-unit id="login_project" datatype="html">
+				<source>Project</source>
+				<target>Projeto</target>
+			</trans-unit>
 			<trans-unit id="login_username" datatype="html">
 				<source>Username</source>
 				<target>Usuário</target>
