@@ -12,6 +12,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule	} from '@angular/material-moment-adapter';
 
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
@@ -60,6 +62,8 @@ registerLocaleData(localePt);
 		MatToolbarModule,
 		MatTableModule,
 		MatSortModule,
+		MatDatepickerModule,
+		MatMomentDateModule,
 	],
 	providers: [
 		{provide: LOCALE_ID, useValue: 'pt-BR'}

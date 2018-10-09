@@ -8,28 +8,23 @@
 				(ngSubmit)="generateReports(myForm.value)"
 				ngNativeValidate>
 
-		<div class="d-flex">
+		<div class="d-flex mx-2">
 			<label for="initial-date" class="mr-1 d-flex align-items-center" i18n="@@home_main_initial_date">Initial date</label>
-			<mat-form-field>
-				<input type="date"
-							 matInput
-							 id="initial-date"
-							 title="initial-date"
-							 [(ngModel)]="searchFormModel.initialDate"
-							 name="initialDate">
+			<mat-form-field class="date-form-field">
+				<input matInput name="initialDate" id="initial-date" [matDatepicker]="initialDatePicker" [(ngModel)]="searchFormModel.initialDate">
+				<mat-datepicker-toggle matSuffix [for]="initialDatePicker"></mat-datepicker-toggle>
+				<mat-datepicker #initialDatePicker></mat-datepicker>
 			</mat-form-field>
 		</div>
 
-		<div class="d-flex">
+		<div class="d-flex mx-2">
 			<label for="final-date" class="mr-1 d-flex align-items-center" i18n="@@home_main_last_date">Last date</label>
-			<mat-form-field>
-				<input type="date"
-							 matInput
-							 id="final-date"
-							 title="final-date"
-							 [(ngModel)]="searchFormModel.finalDate"
-							 name="finalDate">
+			<mat-form-field class="date-form-field">
+				<input matInput name="finalDate" id="final-date" [matDatepicker]="finalDatePicker" [(ngModel)]="searchFormModel.finalDate">
+				<mat-datepicker-toggle matSuffix [for]="finalDatePicker"></mat-datepicker-toggle>
+				<mat-datepicker #finalDatePicker></mat-datepicker>
 			</mat-form-field>
+
 		</div>
 
 		<button mat-stroked-button type="submit" i18n="@@home_main_generate_reports" class="ml-1">Generate reports</button>

@@ -16,11 +16,14 @@
 	"private": true,
 	"dependencies": {
 		"@angular/animations": "^6.1.9",
+		"@angular/cdk": "^6.4.7",
 		"@angular/common": "^6.1.9",
 		"@angular/compiler": "^6.1.9",
 		"@angular/core": "^6.1.9",
 		"@angular/forms": "^6.1.9",
 		"@angular/http": "^6.1.9",
+		"@angular/material": "^6.4.7",
+		"@angular/material-moment-adapter": "^6.4.7",
 		"@angular/platform-browser": "^6.1.9",
 		"@angular/platform-browser-dynamic": "^6.1.9",
 		"@angular/router": "^6.1.9",
@@ -29,9 +32,7 @@
 		"font-awesome": "^4.7.0",
 		"moment": "^2.22.2",
 		"rxjs": "^6.3.3",
-		"zone.js": "^0.8.26",
-		"@angular/cdk": "^6.4.7",
-		"@angular/material": "^6.4.7"
+		"zone.js": "^0.8.26"
 	},
 	"devDependencies": {
 		"@angular-devkit/build-angular": "~0.6.6",
