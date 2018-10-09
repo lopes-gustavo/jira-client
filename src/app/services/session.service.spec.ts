@@ -14,8 +14,17 @@ describe('SessionService', () => {
 		expect(service).toBeTruthy();
 	}));
 
-	it('should gather information from session/local storage at initialization', inject([SessionService], (service: SessionService) => {
-		sessionStorage.setItem('currentUser', JSON.stringify(author));
-		expect(service.currentUser).toEqual(author);
-	}));
+	describe('', () => {
+		beforeEach(() => {
+			sessionStorage.setItem('currentUser', JSON.stringify(author));
+
+			TestBed.configureTestingModule({
+				providers: [SessionService]
+			});
+		});
+
+		it('should gather information from session/local storage at initialization', inject([SessionService], (service: SessionService) => {
+			expect(service.currentUser).toEqual(author);
+		}));
+	});
 });

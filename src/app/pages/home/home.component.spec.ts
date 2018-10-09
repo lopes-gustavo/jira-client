@@ -18,7 +18,8 @@ import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
 import { SessionService } from '../../services';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatInputModule } from '@angular/material';
+import { MatDatepickerModule, MatInputModule } from '@angular/material';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 class SessionServiceMock {
 	currentUser = {displayName: ''};
@@ -52,6 +53,8 @@ describe('HomeComponent', () => {
 				MatToolbarModule,
 				MatTableModule,
 				MatSortModule,
+				MatDatepickerModule,
+				MatMomentDateModule,
 			],
 			providers: [
 				{provide: SessionService, useClass: SessionServiceMock},

@@ -13,9 +13,6 @@ const STORAGE_PROJECT = 'project';
 export class SessionService {
 
 	private _currentUser: Nullable<Jira.Author> = null;
-	get currentUser(): Nullable<Jira.Author> {
-		return this._currentUser;
-	}
 
 	constructor() {
 		// Tenta buscar no local storage ou session storage.
@@ -26,7 +23,6 @@ export class SessionService {
 
 		this._currentUser = localStorageCurrentUser || sessionStorageCurrentUser;
 	}
-
 
 	public get currentUser(): Nullable<Jira.Author> {
 		return this._currentUser;
@@ -51,8 +47,6 @@ export class SessionService {
 	}
 
 	public setCurrentUser(user: Jira.Author, preserveSession: boolean): void {
-		this.sessionPreserved = preserveSession;
-
 		if (preserveSession) {
 			localStorage.setItem(STORAGE_CURRENT_USER, JSON.stringify(user));
 			sessionStorage.removeItem(STORAGE_CURRENT_USER);
