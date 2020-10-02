@@ -23,9 +23,10 @@ describe('AuthGuard', () => {
 		authGuard = TestBed.get(AuthGuard);
 	});
 
-	it('should not allow unlogged users to proceed', () => {
+	it('should not allow unlogged users to proceed', inject([SessionService], (sessionService: SessionService) => {
+		sessionService.setCurrentUser(null, false);
 		expect(authGuard.canActivate()).toBe(false);
-	});
+	}));
 
 	it('should allow logged users to proceed', inject([SessionService], (sessionService: SessionService) => {
 		sessionService.setCurrentUser(author, false);

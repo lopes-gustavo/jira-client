@@ -33,7 +33,7 @@ describe('ServerService', () => {
 	it('#getJiraData should return a Jira.SearchResponse', inject([ServerService], (service: ServerService) => {
 		httpClient.get.and.returnValue(of(searchResponse));
 
-		service.getJiraData('token', 'server', 'name', '2018-10-08', '2018-10-10').subscribe(
+		service.getJiraData('token', 'server', 'project', 'name', {initialDate: '2018-10-08', finalDate: '2018-10-10'}).subscribe(
 			(value => expect(value).toEqual(searchResponse)),
 			(error => fail(error))
 		);
@@ -42,7 +42,7 @@ describe('ServerService', () => {
 	it('#getTeamJiraData should return a Jira.SearchResponse', inject([ServerService], (service: ServerService) => {
 		httpClient.get.and.returnValue(of(searchResponse));
 
-		service.getTeamJiraData('token', 'server', '2018-10-08', '2018-10-10').subscribe(
+		service.getTeamJiraData('token', 'server', 'project', {initialDate: '2018-10-08', finalDate: '2018-10-10'}).subscribe(
 			(value => expect(value).toEqual(searchResponse)),
 			(error => fail(error))
 		);

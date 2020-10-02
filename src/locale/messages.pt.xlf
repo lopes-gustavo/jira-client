@@ -50,6 +50,10 @@
 				<source>Server</source>
 				<target>Servidor</target>
 			</trans-unit>
+			<trans-unit id="login_project" datatype="html">
+				<source>Project</source>
+				<target>Projeto</target>
+			</trans-unit>
 			<trans-unit id="login_username" datatype="html">
 				<source>Username</source>
 				<target>Usuário</target>
@@ -91,6 +95,10 @@
 			<trans-unit id="home_main_coloured_table" datatype="html">
 				<source>Coloured table</source>
 				<target>Colorir tabela</target>
+			</trans-unit>
+			<trans-unit id="home_main_filter_fewer_than_8hours" datatype="html">
+				<source>Only fewer than 8 hours</source>
+				<target>Apenas logs menores que 8 horas</target>
 			</trans-unit>
 		</body>
 	</file>

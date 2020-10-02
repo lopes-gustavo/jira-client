@@ -1,22 +1,20 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Jira } from '../models';
 import { Nullable } from '../types';
 
 const STORAGE_SERVER_URL = 'serverUrl';
 const STORAGE_CURRENT_USER = 'currentUser';
 const STORAGE_DISCLAIMER = 'disclaimer';
+const STORAGE_PROJECT = 'project';
 
 @Injectable({
 	providedIn: 'root'
 })
-export class SessionService implements OnInit {
+export class SessionService {
 
 	private _currentUser: Nullable<Jira.Author> = null;
-	get currentUser(): Nullable<Jira.Author> {
-		return this._currentUser;
-	}
 
-	ngOnInit() {
+	constructor() {
 		// Tenta buscar no local storage ou session storage.
 		// Retorna o valor do local storage se existir, se não o valor do session storage.
 		// Caso ambos sejam nulos, retorna nulo
@@ -24,6 +22,28 @@ export class SessionService implements OnInit {
 		const sessionStorageCurrentUser = JSON.parse(sessionStorage.getItem(STORAGE_CURRENT_USER) as string);
 
 		this._currentUser = localStorageCurrentUser || sessionStorageCurrentUser;
+	}
+
+	public get currentUser(): Nullable<Jira.Author> {
+		return this._currentUser;
+	}
+
+	public get serverUrl() {
+		const serverUrl = sessionStorage.getItem(STORAGE_SERVER_URL);
+		if (!serverUrl) {
+			return '';
+		}
+
+		return serverUrl;
+	}
+
+	public get project() {
+		const project = sessionStorage.getItem(STORAGE_PROJECT);
+		if (!project) {
+			return '';
+		}
+
+		return project;
 	}
 
 	public setCurrentUser(user: Jira.Author, preserveSession: boolean): void {
@@ -61,17 +81,11 @@ export class SessionService implements OnInit {
 		sessionStorage.setItem(STORAGE_SERVER_URL, serverUrl);
 	}
 
-	public getServerUrl() {
-		const serverUrl = sessionStorage.getItem(STORAGE_SERVER_URL);
-		if (!serverUrl) {
-			return '';
-		}
-
-		return serverUrl;
-	}
-
 	public clearServerUrl() {
 		sessionStorage.removeItem(STORAGE_SERVER_URL);
 	}
 
+	public saveProjectName(projectName: string) {
+		sessionStorage.setItem(STORAGE_PROJECT, projectName);
+	}
 }

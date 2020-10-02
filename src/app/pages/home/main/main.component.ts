@@ -12,41 +12,33 @@ import { Jira } from '../../../models';
 	styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-	private serverUrl: string;
-
 	sortParams = {
 		isDesc: false,
 		column: 'timeSpentHours',
 		direction: 1,
 	};
+	// private readonly WORKLOG_WEEKEND_THRESHOLD = 0;
 
 	// TODO: Use NgDatePicker
-	searchFormModel = {
+	searchFormModel: SearchFormModel = {
 		initialDate: moment().add(-2, `weeks`).format(`YYYY-MM-DD`),
 		finalDate: moment().format(`YYYY-MM-DD`),
 	};
 	displayOverlay = true;
 	jiraData = new JiraData();
 	currentUser: Jira.Author;
-
 	// TODO: Remove moment and use some lightweight library
 	dateRange: moment.Moment[] = [];
 
-	tableDataHoursPerTaskPerDay: { displayedColumns: string[], dataSource: MatTableDataSource<Worklog> } = {
-		displayedColumns: ['key', 'status', 'summary', 'created', 'timeSpentHours'],
-		dataSource: new MatTableDataSource([]),
-	};
-	tableDataHoursPerDay: { displayedColumns: string[], dataSource: MatTableDataSource<{date: string, hours: number}> } = {
-		displayedColumns: ['date', 'hours'],
-		dataSource: new MatTableDataSource([]),
-	};
-	tableDataTeamHoursPerDay: { displayedColumns: string[], dataSource: string[][] } = {
-		displayedColumns: [],
-		dataSource: [],
-	};
+	tableDataHoursPerTaskPerDay = new TableData<Worklog>(['key', 'status', 'summary', 'created', 'timeSpentHours']);
+	tableDataHoursPerDay = new TableData<{ date: string, hours: number }>(['date', 'hours']);
+	tableDataTeamHoursPerDay = new TableData<string[]>([]);
 
 	@ViewChild('tableDataHoursPerTaskPerDaySort') tableDataHoursPerTaskPerDaySort: MatSort;
 	@ViewChild('tableDataHoursPerDaySort') tableDataHoursPerDaySort: MatSort;
+	private readonly WORKLOG_WEEKDAY_THRESHOLD = 8;
+	private serverUrl: string;
+	private project: string;
 
 	constructor(router: Router, private serverService: ServerService, private sessionService: SessionService) {
 		const currentUser = this.sessionService.currentUser;
@@ -56,9 +48,16 @@ export class MainComponent implements OnInit {
 			router.navigate(['/logout']);
 		}
 
-		const serverUrl = sessionService.getServerUrl();
+		const serverUrl = sessionService.serverUrl;
 		if (serverUrl) {
 			this.serverUrl = serverUrl;
+		} else {
+			router.navigate(['/logout']);
+		}
+
+		const project = sessionService.project;
+		if (project) {
+			this.project = project;
 		} else {
 			router.navigate(['/logout']);
 		}
@@ -67,14 +66,7 @@ export class MainComponent implements OnInit {
 	ngOnInit() {
 		this.tableDataHoursPerTaskPerDay.dataSource.sort = this.tableDataHoursPerTaskPerDaySort;
 		this.tableDataHoursPerDay.dataSource.sort = this.tableDataHoursPerDaySort;
-	}
-
-	sortColumnBy(property: string) {
-		this.sortParams.isDesc = !this.sortParams.isDesc;
-		this.sortParams.column = property;
-		this.sortParams.direction = this.sortParams.isDesc ? 1 : -1;
-
-		this.sortJiraIssuesByWorklog();
+		this.tableDataHoursPerDay.dataSource.filterPredicate = (data: { date: string, hours: number }, filter: string) => data.hours < Number(filter);
 	}
 
 	keys(value: any): { key: string, value: any }[] {
@@ -83,21 +75,7 @@ export class MainComponent implements OnInit {
 		return keys;
 	}
 
-	getFaIconClassFor(column: string) {
-		if (this.sortParams.column !== column) {
-			return 'fa fa-sort';
-		}
-		if (this.sortParams.column === column && this.sortParams.isDesc) {
-			return 'fa fa-sort-desc';
-		}
-		if (this.sortParams.column === column && !this.sortParams.isDesc) {
-			return 'fa fa-sort-asc';
-		} else {
-			return '';
-		}
-	}
-
-	generateReports(form: { initialDate: string; finalDate: string }): boolean {
+	generateReports(form: SearchFormModel): boolean {
 
 		// TODO: Create an `alert` component
 		if (!form.initialDate) {
@@ -120,8 +98,8 @@ export class MainComponent implements OnInit {
 		if (this.currentUser) {
 
 			forkJoin(
-				this.serverService.getJiraData(this.currentUser.token, this.serverUrl, this.currentUser.name, form.initialDate, form.finalDate),
-				this.serverService.getTeamJiraData(this.currentUser.token, this.serverUrl, form.initialDate, form.finalDate),
+				this.serverService.getJiraData(this.currentUser.token, this.serverUrl, this.project, this.currentUser.name, form),
+				this.serverService.getTeamJiraData(this.currentUser.token, this.serverUrl, this.project, form),
 			).subscribe(([jiraData, jiraTeamData]: [Jira.SearchResponse, Jira.SearchResponse]) => {
 				this.updateJiraData(jiraData);
 				this.updateTeamJiraData(jiraTeamData);
@@ -129,8 +107,6 @@ export class MainComponent implements OnInit {
 				this.displayOverlay = false;
 			});
 
-			// this._getJiraData(this.updateJiraData.bind(this));
-			// this._getTeamJiraData(this.updateTeamJiraData.bind(this));
 		}
 
 		return true;
@@ -144,12 +120,37 @@ export class MainComponent implements OnInit {
 		return [6, 7].includes(moment(date, 'DD MMM').isoWeekday());
 	}
 
+	getBackgroundColor(hoursAsString: string, isWeekend: boolean) {
+		const hours = Number(hoursAsString);
+
+		if (!isWeekend) {
+			if (hours === this.WORKLOG_WEEKDAY_THRESHOLD) {
+				return 'green';
+			} else if (hours < this.WORKLOG_WEEKDAY_THRESHOLD) {
+				return 'lightcoral';
+			} else {
+				return 'yellow';
+			}
+		} else {
+			if (hours === 0) {
+				return '';
+			} else {
+				return 'yellow';
+			}
+		}
+
+	}
+
+	filter(shouldFilter: boolean) {
+		this.tableDataHoursPerDay.dataSource.filter = shouldFilter ? String(this.WORKLOG_WEEKDAY_THRESHOLD) : '';
+	}
+
 	private clearData() {
 		this.jiraData.clear();
 		this.dateRange = [];
 	}
 
-	private initializeDateRangeArray({initialDate, finalDate}: { initialDate: string, finalDate: string }) {
+	private initializeDateRangeArray({initialDate, finalDate}: SearchFormModel) {
 		const initialDateMoment = moment(initialDate);
 		const finalDateMoment = moment(finalDate);
 		do {
@@ -186,16 +187,24 @@ export class MainComponent implements OnInit {
 			issue.fields.worklog.worklogs
 				.filter(worklog => worklog.author.key === this.currentUser.key)
 				.forEach(worklog => {
-				worklog.timeSpentHours = worklog.timeSpentSeconds / 60 / 60;
+					worklog.timeSpentHours = worklog.timeSpentSeconds / 60 / 60;
 
-				this.createJiraWorklogByDaysObject(issue, worklog);
-			});
+					this.createJiraWorklogByDaysObject(issue, worklog);
+				});
 
 		});
 
 		this.tableDataHoursPerTaskPerDay.dataSource.data = this.jiraData.currentUserIssues;
-		this.tableDataHoursPerDay.dataSource.data = this.keys(this.jiraData.currentUserWorklogByDay)
-			.reduce((acc, cur) => [...acc, {date: cur.key, hours: cur.value}], []);
+		// this.tableDataHoursPerDay.dataSource.data = this.keys(this.jiraData.currentUserWorklogByDay)
+		// 	.reduce((acc, cur) => [...acc, {date: cur.key, hours: cur.value}], []);
+		this.tableDataHoursPerDay.dataSource.data = this.dateRange
+			.reduce((acc, cur) => [
+				...acc,
+				{
+					date: cur.format('DD MMM'),
+					hours: this.jiraData.currentUserWorklogByDay[cur.format('YYYY-MM-DD')] || 0
+				}
+			], []);
 
 		this.sortJiraIssuesByWorklog();
 
@@ -207,7 +216,7 @@ export class MainComponent implements OnInit {
 				`Por favor, diminua o intervalo da busca ou requisite ao desenvolvedor que implemente busca com paginação.`);
 		}
 
-		this.tableDataTeamHoursPerDay.dataSource = [];
+		this.tableDataTeamHoursPerDay.dataSource.data = [];
 		jiraData.issues.forEach(issue => {
 			if (!issue.fields.worklog.worklogs.length) {
 				issue.fields.worklog.worklogs.push(new Jira.Issue.Worklogs());
@@ -227,12 +236,12 @@ export class MainComponent implements OnInit {
 
 		for (const worklogHours of this.keys(this.jiraData.teamWorklogByDay)) {
 			// const index = this.tableDataTeamHoursPerDay.dataSource.push([worklogHours.key]);
-			const index = this.tableDataTeamHoursPerDay.dataSource.push([worklogHours.key]);
+			const index = this.tableDataTeamHoursPerDay.dataSource.data.push([worklogHours.key]);
 			// this.tableDataTeamHoursPerDay.dataSource[index - 1].push();
 
 			for (const day of this.dateRange) {
 				const hours = this.getWorklogHoursOnDay(worklogHours, day);
-				this.tableDataTeamHoursPerDay.dataSource[index - 1].push(`${hours}`);
+				this.tableDataTeamHoursPerDay.dataSource.data[index - 1].push(`${hours}`);
 			}
 		}
 
@@ -273,21 +282,11 @@ export class MainComponent implements OnInit {
 		}
 
 	}
+}
 
-	getBackgroundColor(hoursAsString: string, isWeekend: boolean) {
-		const hours = Number(hoursAsString);
-
-		if (!isWeekend) {
-			if (hours === 8) { return 'green'; }
-			else if (hours < 8) { return 'lightcoral'; }
-			else { return 'yellow'; }
-		} else {
-			if (hours === 0) { return ''; }
-			else { return 'yellow'; }
-		}
-
-	}
-
+export interface SearchFormModel {
+	initialDate: string;
+	finalDate: string;
 }
 
 interface Worklog {
@@ -297,6 +296,16 @@ interface Worklog {
 	description: string;
 	created: string;
 	timeSpentHours: number;
+}
+
+class TableData<T> {
+	displayedColumns: string[];
+	dataSource: MatTableDataSource<T>;
+
+	constructor(columns: string[]) {
+		this.displayedColumns = columns;
+		this.dataSource = new MatTableDataSource<T>([]);
+	}
 }
 
 class JiraData {

@@ -17,13 +17,23 @@
 			<mat-card-content class="d-flex flex-column">
 
 				<mat-form-field [hideRequiredMarker]="true">
-					<mat-label i18n="@@login_server">Server</mat-label>
 					<input matInput
 								 [(ngModel)]="loginFormModel.server"
 								 id="server"
 								 name="server"
 								 i18n-placeholder="@@login_server"
-								 placeholder="Server placeholder"
+								 placeholder="Server"
+								 required
+								 type="text">
+				</mat-form-field>
+
+				<mat-form-field [hideRequiredMarker]="true">
+					<input matInput
+								 [(ngModel)]="loginFormModel.project"
+								 id="project"
+								 name="project"
+								 i18n-placeholder="@@login_project"
+								 placeholder="Project"
 								 required
 								 type="text">
 				</mat-form-field>

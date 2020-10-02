@@ -62,6 +62,7 @@ describe('LoginPageComponent', () => {
 		component.login({
 			user: 'user',
 			password: 'password',
+			project: 'project',
 			server: 'server',
 			savePassword: false,
 			clear: () => {

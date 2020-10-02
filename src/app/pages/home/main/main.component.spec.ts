@@ -5,7 +5,16 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSortModule, MatTableModule, MatToolbarModule } from '@angular/material';
+import {
+	MatCheckboxModule,
+	MatDatepickerModule,
+	MatFormFieldModule,
+	MatInputModule,
+	MatSortModule,
+	MatTableModule,
+	MatToolbarModule
+} from '@angular/material';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 describe('MainComponent', () => {
 	const router = {navigate: jasmine.createSpy('navigate')};
@@ -26,6 +35,8 @@ describe('MainComponent', () => {
 				MatToolbarModule,
 				MatTableModule,
 				MatSortModule,
+				MatDatepickerModule,
+				MatMomentDateModule,
 			],
 			providers: [
 				{provide: Router, useValue: router}

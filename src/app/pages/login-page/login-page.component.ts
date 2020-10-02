@@ -21,7 +21,6 @@ export class LoginPageComponent {
 		private router: Router,
 		browser: BrowserService
 	) {
-
 		// Se já está logado, redireciona para página principal
 		if (this.sessionService.currentUser) {
 			this.router.navigate(['/']);
@@ -45,6 +44,8 @@ export class LoginPageComponent {
 
 				this.sessionService.saveServerUrl(form.server);
 
+				this.sessionService.saveProjectName(form.project);
+
 				this.router.navigate(['/']);
 			},
 			(error) => this.error = error,
@@ -61,12 +62,14 @@ class LoginFormModel {
 	user: string;
 	password: string;
 	server: string;
+	project: string;
 	savePassword: boolean;
 
 	public clear() {
 		this.user = '';
 		this.password = '';
 		this.server = '';
+		this.project = '';
 		this.savePassword = false;
 	}
 }
